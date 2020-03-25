@@ -15,10 +15,13 @@ class Config(dict):
                 d: dict = json.load(f)
                 if not isinstance(d, dict):
                     raise ValueError(f"Config file {self.path} does not provide a dictionary.")
+            ret = {}
             for key in d:
                 if key.startswith("_"):
-                    d[key[1:]] = self._load_hidden(key[1:], d.pop(i))
-            self.update(d)
+                    ret[key[1:]] = self._load_hidden(key[1:], d[key])
+                else:
+                    ret[key] = d[key]
+            self.update(ret)
 
     @staticmethod
     def _load_hidden(key, value):
