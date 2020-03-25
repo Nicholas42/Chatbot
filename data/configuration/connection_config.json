@@ -1,0 +1,15 @@
+{
+  "connection": {
+    "protocoll": {
+      "http": "https",
+      "ws": "wss"
+    },
+    "host": "chat.qed-verein.de",
+    "path": "/websocket",
+    "login": "/rubychat/account"
+  },
+  "_user": {
+    "username": null,
+    "password": null
+  }
+}
