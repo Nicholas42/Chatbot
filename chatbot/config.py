@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 class Config(dict):
-    def __init__(self, path: Path = Path(__file__) / ".." / "data" / "configuration",
-                 env_file: Path = Path(__file__) / ".." / ".env"):
+    def __init__(self, path: Path = Path(__file__).parent / ".." / "data" / "configuration",
+                 env_file: Path = Path(__file__).parent / ".." / ".env"):
         super().__init__()
         self.path = path
         dotenv.load_dotenv(str(env_file.absolute()))
