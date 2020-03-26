@@ -4,6 +4,7 @@ from typing import Optional
 
 from websockets import WebSocketClientProtocol
 
+from chatbot.models.messages import IncomingMessage, OutgoingMessage
 from .conn import PreparedConnection
 from . import module_logger
 
@@ -24,8 +25,12 @@ class Channel:
         logger.debug(f"Connection to channel {self.channel} established.")
         return self.listening_conn
 
-    async def read_msg(self):
-        return await self.listening_conn.recv()
+    async def read_msg(self) -> IncomingMessage:
+        while True:
+            try:
+                return IncomingMessage.from_json(await self.listening_conn.recv())
+            except TypeError:
+                pass
 
     async def stop_listening(self):
         logger.debug(f"Stop listening to channel {self.channel}.")
@@ -34,12 +39,8 @@ class Channel:
         self.listening_conn = None
         logger.debug(f"Connection to channel {self.channel} stopped.")
 
-    async def send_msg(self, message):
-        message["channel"] = self.channel
-        message["publicid"] = 1 if message.get("publicid", 1) else 0
-        message["delay"] = message.get("delay", 0)
-
+    async def send_msg(self, message: OutgoingMessage):
         logger.debug(f"Sending message {message}.")
 
         async with self.connection.connect() as conn:
-            await conn.send(json.dumps(message))
+            await conn.send(message.to_json())

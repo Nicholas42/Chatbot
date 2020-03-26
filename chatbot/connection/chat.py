@@ -1,9 +1,11 @@
-from asyncio import create_task, Queue, CancelledError
-from typing import Dict
+from asyncio import create_task, Queue, CancelledError, Task
+from asyncio.queues import Queue
+from typing import Dict, Any
 import logging
 
 from websockets import ConnectionClosedError
 
+from chatbot.models.messages import IncomingMessage, OutgoingMessage
 from .channel import Channel
 from . import module_logger
 
@@ -12,6 +14,9 @@ logger: logging.Logger = module_logger.getChild("chat")
 
 class Chat:
     channels: Dict[str, Channel]
+    listener_tasks: Dict[str, Task]
+    in_queue: Queue[IncomingMessage]
+    out_queue: Queue[OutgoingMessage]
 
     def __init__(self):
         self.channels = dict()
@@ -22,7 +27,7 @@ class Chat:
     async def read_msg(self):
         return await self.in_queue.get()
 
-    async def handle_msg(self, msg):
+    async def handle_msg(self, msg: IncomingMessage):
         await self.in_queue.put(msg)
 
     async def send_worker(self):
@@ -33,22 +38,22 @@ class Chat:
         except CancelledError:
             raise
 
-    def _send_msg(self, message):
-        channel = message["channel"]
+    def _send_msg(self, message: OutgoingMessage):
+        channel = message.channel
         if channel not in self.channels:
             raise KeyError(f"Not listening to channel {channel}.")
 
         return create_task(self.channels[channel].send_msg(message))
 
-    def send_msg(self, message, channel=None):
+    def send_msg(self, message: OutgoingMessage, channel=None):
         if channel is not None:
-            message["channel"] = channel
+            message.channel = channel
 
         self.out_queue.put_nowait(message)
 
-    async def send_msg_async(self, message, channel=None):
+    async def send_msg_async(self, message: OutgoingMessage, channel=None):
         if channel is not None:
-            message["channel"] = channel
+            message.channel = channel
 
             await self.out_queue.put(message)
 
@@ -80,10 +85,9 @@ class Chat:
         logger.info(f"Unregistering channel {channel}.")
         try:
             self.listener_tasks[channel].cancel()
-            await self.listener_tasks[channel]
+            await self.listener_tasks.pop(channel)
         except CancelledError:
             pass
         self.channels.pop(channel)
-        self.listener_tasks.pop(channel)
 
         logger.info(f"Unregistered channel {channel}.")
