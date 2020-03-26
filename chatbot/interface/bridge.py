@@ -4,8 +4,6 @@ from .messages import IncomingMessage, OutgoingMessage
 
 
 class Bridge:
-    incoming_queue: Queue[IncomingMessage]
-    outgoing_queue: Queue[OutgoingMessage]
 
     def __init__(self):
         self.incoming_queue = Queue()
