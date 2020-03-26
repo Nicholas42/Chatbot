@@ -5,7 +5,9 @@ from chatbot import config
 
 
 class PreparedConnection:
-    def __init__(self, channel="test", position=0, _config=config, url_opts=None):
+    def __init__(self, channel="test", position=0, _config=None, url_opts=None):
+        if _config is None:
+            _config = config
         if url_opts is None:
             url_opts = dict()
         url_opts.update({"channel": channel, "position": position})
