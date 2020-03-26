@@ -1,13 +1,12 @@
-from asyncio import create_task, Queue, CancelledError, Task
-from asyncio.queues import Queue
-from typing import Dict, Any
 import logging
+from asyncio import create_task, Queue, CancelledError, Task
+from typing import Dict
 
 from websockets import ConnectionClosedError
 
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
-from .channel import Channel
 from . import module_logger
+from .channel import Channel
 
 logger: logging.Logger = module_logger.getChild("chat")
 
