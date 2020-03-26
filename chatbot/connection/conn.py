@@ -4,7 +4,7 @@ from requests import Session
 from chatbot import config
 
 
-class Connection(Connect):
+class PreparedConnection:
     def __init__(self, channel="test", position=0, _config=config, url_opts=None):
         if url_opts is None:
             url_opts = dict()
@@ -18,7 +18,8 @@ class Connection(Connect):
 
         self.cookie = self._obtain_cookie()
 
-        super().__init__(self.ws_url, extra_headers={"Cookie": self.cookie}, origin=Origin(self.http_url))
+    def connect(self):
+        return Connect(self.ws_url, extra_headers={"Cookie": self.cookie}, origin=Origin(self.http_url))
 
     def _obtain_cookie(self):
         ses = Session()
