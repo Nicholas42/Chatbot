@@ -1,11 +1,11 @@
 import logging
-from asyncio import create_task, Queue, CancelledError, Task
+from asyncio import create_task, CancelledError, Task, wait
 from typing import Dict
 
 from websockets import ConnectionClosedError
 
-from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from chatbot.interface.bridge import Bridge
+from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from . import module_logger
 from .channel import Channel
 
@@ -74,3 +74,8 @@ class Chat:
         self.channels.pop(channel)
 
         logger.info(f"Unregistered channel {channel}.")
+
+    async def shutdown(self):
+        logger.info("Shutting down...")
+        await wait(map(self.unlisten, self.channels))
+        logger.info("Shut down.")
