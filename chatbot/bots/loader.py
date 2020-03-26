@@ -27,3 +27,6 @@ class Loader:
         sys.modules[bot_name] = module
         spec.loader.exec_module(module)
         self.bots[bot_name] = module
+
+    def reload_bot(self, bot_name):
+        self.bots[bot_name] = importlib.reload(self.bots[bot_name])

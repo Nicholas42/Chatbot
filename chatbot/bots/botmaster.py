@@ -23,5 +23,14 @@ class BotMaster:
             if ret:
                 self.bridge.put_outgoing_nowait(ret)
 
+    async def stop_bot(self, bot_name):
+        bot = self.bots.pop(bot_name)
+        await bot.shutdown()
+
+    async def reload_bot(self, bot_name):
+        await self.stop_bot(bot_name)
+        self.loader.reload_bot(bot_name)
+        self.load_bot(bot_name)
+
     def load_bot(self, bot_name):
         self.bots[bot_name] = self.loader.create_bot(bot_name)
