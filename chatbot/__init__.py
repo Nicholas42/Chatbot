@@ -1,3 +1,5 @@
 from .config import Config
+from logging import getLogger, Logger
 
-config = Config()
+module_logger: Logger = getLogger("chatbot")
+config: Config = Config()
