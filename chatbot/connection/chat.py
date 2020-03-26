@@ -47,18 +47,21 @@ class Chat:
                     await self.channels[channel].stop_listening()
                     logging.debug(f"Connection to channel {channel} closed, reconnecting...")
             except CancelledError:
-                await self.channels[channel].stop_listening()
+                if channel in self.channels and self.channels[channel]:
+                    await self.channels[channel].stop_listening()
+                raise
 
         self.listener_tasks[channel] = create_task(listen_to())
         logger.info(f"Registered channel {channel}.")
 
     async def unlisten(self, channel):
         logger.info(f"Unregistering channel {channel}.")
-        self.listener_tasks[channel].cancel()
         try:
-            await self.listener_tasks[channel].cancel()
+            self.listener_tasks[channel].cancel()
+            await self.listener_tasks[channel]
         except CancelledError:
             pass
         self.channels.pop(channel)
+        self.listener_tasks.pop(channel)
 
         logger.info(f"Unregistered channel {channel}.")
