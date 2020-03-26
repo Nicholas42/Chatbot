@@ -4,7 +4,7 @@ from typing import Optional
 
 from websockets import WebSocketClientProtocol
 
-from chatbot.models.messages import IncomingMessage, OutgoingMessage
+from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from .conn import PreparedConnection
 from . import module_logger
 

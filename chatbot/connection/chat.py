@@ -5,7 +5,7 @@ import logging
 
 from websockets import ConnectionClosedError
 
-from chatbot.models.messages import IncomingMessage, OutgoingMessage
+from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from .channel import Channel
 from . import module_logger
 
