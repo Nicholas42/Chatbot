@@ -5,6 +5,7 @@ from typing import Dict
 from websockets import ConnectionClosedError
 
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
+from chatbot.interface.bridge import Bridge
 from . import module_logger
 from .channel import Channel
 
@@ -14,25 +15,20 @@ logger: logging.Logger = module_logger.getChild("chat")
 class Chat:
     channels: Dict[str, Channel]
     listener_tasks: Dict[str, Task]
-    in_queue: Queue[IncomingMessage]
-    out_queue: Queue[OutgoingMessage]
+    bridge: Bridge
 
-    def __init__(self):
+    def __init__(self, bridge: Bridge):
         self.channels = dict()
         self.listener_tasks = dict()
-        self.in_queue = Queue()
-        self.out_queue = Queue()
+        self.bridge = bridge
 
-    async def read_msg(self):
-        return await self.in_queue.get()
-
-    async def handle_msg(self, msg: IncomingMessage):
-        await self.in_queue.put(msg)
+    def handle_msg(self, msg: IncomingMessage):
+        self.bridge.put_incoming_nowait(msg)
 
     async def send_worker(self):
         try:
             while True:
-                msg = await self.out_queue.get()
+                msg = await self.bridge.get_outgoing()
                 self._send_msg(msg)
         except CancelledError:
             raise
@@ -44,18 +40,6 @@ class Chat:
 
         return create_task(self.channels[channel].send_msg(message))
 
-    def send_msg(self, message: OutgoingMessage, channel=None):
-        if channel is not None:
-            message.channel = channel
-
-        self.out_queue.put_nowait(message)
-
-    async def send_msg_async(self, message: OutgoingMessage, channel=None):
-        if channel is not None:
-            message.channel = channel
-
-            await self.out_queue.put(message)
-
     async def listen(self, channel):
         logging.info(f"Registering channel {channel}.")
         self.channels[channel] = Channel(channel)
@@ -66,7 +50,7 @@ class Chat:
                     conn = await self.channels[channel].start_listening()
                     try:
                         async for msg in conn:
-                            await self.handle_msg(msg)
+                            self.handle_msg(msg)
                     except ConnectionClosedError as e:
                         logging.info(
                             f"Connection to channel {channel} closed with error.\n Code: {e.code}, Reason: {e.reason}")
