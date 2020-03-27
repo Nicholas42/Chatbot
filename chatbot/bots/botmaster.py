@@ -1,6 +1,7 @@
 from asyncio import as_completed, create_task, CancelledError
 from typing import Dict
 
+from chatbot import config
 from chatbot.bots.abc import BotABC
 from chatbot.bots.loader import Loader
 from chatbot.interface.bridge import Bridge
@@ -11,11 +12,16 @@ class BotMaster:
     bots: Dict[str, BotABC]
     bridge: Bridge
 
-    def __init__(self, bridge: Bridge):
+    def __init__(self, bridge: Bridge, _config=None):
+        if _config is None:
+            _config = config
         self.loader = Loader()
         self.bots = dict()
         self.bridge = bridge
         self.listening_task = create_task(self.run())
+
+        for i in _config["botmaster"]["default_bots"]:
+            self.load_bot(i)
 
     async def run(self):
         while True:
