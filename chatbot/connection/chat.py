@@ -80,7 +80,10 @@ class Chat:
 
     async def shutdown(self):
         logger.info("Shutting down...")
-        self.send_task.cancel()
-        await self.send_task
+        try:
+            self.send_task.cancel()
+            await self.send_task
+        except CancelledError:
+            pass
         await wait(map(self.unlisten, self.channels))
         logger.info("Shut down.")
