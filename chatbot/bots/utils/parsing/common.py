@@ -10,6 +10,9 @@ common_parsers = {
     bool: pp.Empty().setParseAction(lambda x: True)
 }
 
+rest_of_line = pp.restOfLine.copy()
+rest_of_string = pp.SkipTo(pp.StringEnd())
+
 
 def update_dict(dict_list):
     ret = dict()
