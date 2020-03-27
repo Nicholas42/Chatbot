@@ -13,7 +13,7 @@ def subparser(f):
 
 def call_parse_result(res: pp.ParseResults, *args, **kwargs):
     d = res.asDict()
-    d["command"](d["options"], *args, **kwargs)
+    return d["command"](d["options"], *args, **kwargs)
 
 
 class Parser:
