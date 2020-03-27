@@ -1,11 +1,13 @@
 import pyparsing as pp
 from pyparsing import pyparsing_common as ppc
+from pyparsing import pyparsing_unicode as ppu
 
-quoted_string = pp.dblQuotedString | pp.sglQuotedString
+uword = pp.Word(ppu.printables)
 
 common_parsers = {
-    int: pp.Word('-' + pp.nums, bodyChars=pp.nums).setParseAction(ppc.convertToInteger) + pp.Suppress(pp.WordEnd()),
-    str: quoted_string,
+    int: pp.Combine(pp.Optional('-') + pp.Word(pp.nums)).setParseAction(ppc.convertToInteger) + pp.Suppress(
+        pp.WordEnd()),
+    str: (pp.QuotedString("'") | pp.QuotedString('"') | uword) + pp.Suppress(pp.WordEnd()),
     bool: pp.Empty().setParseAction(lambda x: True)
 }
 
