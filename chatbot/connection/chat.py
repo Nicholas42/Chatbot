@@ -5,6 +5,7 @@ from typing import Dict
 
 from websockets import ConnectionClosedError
 
+from chatbot import config
 from chatbot.interface.bridge import Bridge
 from chatbot.interface.message_helpers import MessageType
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
@@ -19,11 +20,16 @@ class Chat:
     listener_tasks: Dict[str, Task]
     bridge: Bridge
 
-    def __init__(self, bridge: Bridge):
+    def __init__(self, bridge: Bridge, _config=None):
+        if _config is None:
+            _config = config
         self.channels = dict()
         self.listener_tasks = dict()
         self.bridge = bridge
         self.send_task = create_task(self.send_worker())
+
+        for i in _config["channel"]:
+            self.listen(i)
 
     def handle_msg(self, msg: IncomingMessage):
         self.bridge.put_incoming_nowait(msg)
