@@ -7,5 +7,7 @@ RUN pip install -r requirements.txt
 COPY . /bot
 WORKDIR /bot
 
+RUN pip install -e .
+
 RUN chmod u+x start.sh
 ENTRYPOINT ["./start.sh"]
