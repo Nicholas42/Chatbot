@@ -1,5 +1,4 @@
-Chatbot
-====
+# Chatbot
 
 ### I want to get it running!
 
@@ -12,7 +11,7 @@ $ docker build -t chatbot:latest .
 $ docker run --name chatbot -d chatbot
 ```
 
-#####2. With python
+##### 2. With python
 ```shell script
 $ pip install -r requirements.txt
 $ pip install -e .
