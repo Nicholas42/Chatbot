@@ -26,13 +26,15 @@ class Parser:
         if action is not None:
             value_parser.addParseAction(action)
 
-        self.opt_args.append(pp.Optional(arg + value_parser).setParseAction(lambda x: {x[0]: x[1]}))
+        # It is important that the ParseAction is inside the Optional! Otherwise we will get errors if it does not
+        # match.
+        self.opt_args.append(pp.Optional((arg + value_parser).setName(arg_name).setParseAction(lambda x: {x[0]: x[1]})))
 
     def add_positional_argument(self, name: str, result_type: Callable = str,
                                 value_parser: Optional[pp.ParserElement] = None, action: Optional[Callable] = None):
         if value_parser is None:
             value_parser = common_parsers[result_type].copy()
-        value_parser.addParseAction(action if action else lambda x: {name: x[0]})
+        value_parser.setName(name).addParseAction(action if action else lambda x: {name: x[0]})
 
         self.pos_args.append(value_parser)
 
@@ -42,4 +44,4 @@ class Parser:
         if self.func is not None:
             args.addParseAction(self.func)
 
-        return pp.CaselessKeyword(self.command_word) + args
+        return (pp.CaselessKeyword(self.command_word) + args).streamline()
