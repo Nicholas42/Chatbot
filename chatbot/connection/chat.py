@@ -50,7 +50,7 @@ class Chat:
                     conn = await self.channels[channel].start_listening()
                     try:
                         async for msg in conn:
-                            self.handle_msg(msg)
+                            self.handle_msg(IncomingMessage.from_json(msg))
                     except ConnectionClosedError as e:
                         logging.info(
                             f"Connection to channel {channel} closed with error.\n Code: {e.code}, Reason: {e.reason}")
