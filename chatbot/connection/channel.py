@@ -14,9 +14,9 @@ logger: logging.Logger = module_logger.getChild("channel")
 class Channel:
     listening_conn: Optional[WebSocketClientProtocol]
 
-    def __init__(self, channel="test"):
+    def __init__(self, channel="test", _config=None):
         self.channel = channel
-        self.connection = PreparedConnection(channel=channel, position=0)
+        self.connection = PreparedConnection(channel=channel, position=0, _config=_config)
         self.listening_conn = None
 
     async def start_listening(self):

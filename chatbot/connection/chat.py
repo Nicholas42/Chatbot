@@ -27,6 +27,7 @@ class Chat:
         self.listener_tasks = dict()
         self.bridge = bridge
         self.send_task = create_task(self.send_worker())
+        self.config = _config
 
         for i in _config["channel"]:
             self.listen(i)
@@ -51,7 +52,7 @@ class Chat:
 
     def listen(self, channel):
         logging.info(f"Registering channel {channel}.")
-        self.channels[channel] = Channel(channel)
+        self.channels[channel] = Channel(channel, self.config)
 
         async def listen_to():
             try:
