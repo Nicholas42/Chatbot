@@ -50,11 +50,12 @@ class Parser:
         self.pos_args.append(value_parser)
 
     def as_pp_parser(self) -> pp.ParserElement:
+        pos_args = self.pos_args or [pp.Empty()]
         if self.opt_args:
             optionals = pp.Or(self.opt_args)
-            args = intersperse_parser(self.pos_args, optionals)
+            args = intersperse_parser(pos_args, optionals)
         else:
-            args = pp.And(self.pos_args)
+            args = pp.And(pos_args)
         args.setParseAction(update_dict)
         cw = pp.CaselessKeyword(self.command_word)("command").setParseAction(lambda x: self.func)
 
