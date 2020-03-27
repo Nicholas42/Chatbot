@@ -23,10 +23,12 @@ class Luise:
             if hasattr(func, "_subparser"):
                 func()
 
+    def get_keyword(self):
+        return pyparsing.CaselessKeyword(f"!{self.name}")
 
     async def react(self, msg: IncomingMessage):
         try:
-            result = self.parser.parseString(msg.message)
+            result = (self.get_keyword() + self.parser).parseString(msg.message)
         except pyparsing.ParseBaseException:
             return None
 
