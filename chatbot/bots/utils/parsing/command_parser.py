@@ -6,6 +6,11 @@ from chatbot.bots.utils.parsing.common import intersperse_parser, update_dict
 from .common import common_parsers
 
 
+def subparser(f):
+    f._subparser = True
+    return f
+
+
 def call_parse_result(res: pp.ParseResults, *args, **kwargs):
     d = res.asDict()
     d["command"](d["options"], *args, **kwargs)
