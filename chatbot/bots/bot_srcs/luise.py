@@ -31,11 +31,11 @@ class Luise:
         return call_parse_result(result)
 
     @subparser
-    def say(self):
+    def ping(self):
         def f(args, msg):
             return self.create_msg("pong", msg)
 
-        sub = Parser("say", func=f)
+        sub = Parser("ping", func=f)
         self.subs.append(sub.as_pp_parser())
 
     @subparser
