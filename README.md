@@ -1,4 +1,5 @@
-#Chatbot
+Chatbot
+====
 
 ### I want to get it running!
 
@@ -35,7 +36,7 @@ class MyBot:
                                 channel= incoming_message.channel,  # Or any other channel we are listening to
                                 delay = incoming_message.delay + 1) # So we answer on the right message
 
-BotABC.register(MyBot)
+BotABC.register(MyBot) # So we know that it is a bot.
 
 def create_bot():   # The loader does not need to know the class name
     return MyBot()
