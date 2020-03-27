@@ -18,9 +18,11 @@ class Luise:
         return OutgoingMessage(channel=replying_to.channel, name=self.name, message=message, delay=replying_to.delay)
 
     def add_subparsers(self):
-        for k, v in self.__dict__.items():
-            if hasattr(v, "_subparser"):
-                v(self)
+        for v in dir(self):
+            func = getattr(self, v)
+            if hasattr(func, "_subparser"):
+                func()
+
 
     async def react(self, msg: IncomingMessage):
         try:
