@@ -1,4 +1,4 @@
-from asyncio import as_completed, create_task, CancelledError
+from asyncio import as_completed, create_task, CancelledError, wait
 from typing import Dict
 
 from chatbot import config
@@ -52,3 +52,5 @@ class BotMaster:
             await self.listening_task
         except CancelledError:
             pass
+
+        await wait([i.shutdown() for i in self.bots.values()])
