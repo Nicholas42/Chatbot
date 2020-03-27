@@ -1,3 +1,4 @@
+import json
 import logging
 from asyncio import create_task, CancelledError, Task, wait
 from typing import Dict
@@ -5,6 +6,7 @@ from typing import Dict
 from websockets import ConnectionClosedError
 
 from chatbot.interface.bridge import Bridge
+from chatbot.interface.message_helpers import MessageType
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from . import module_logger
 from .channel import Channel
@@ -21,6 +23,7 @@ class Chat:
         self.channels = dict()
         self.listener_tasks = dict()
         self.bridge = bridge
+        self.send_task = create_task(self.send_worker())
 
     def handle_msg(self, msg: IncomingMessage):
         self.bridge.put_incoming_nowait(msg)
@@ -77,5 +80,7 @@ class Chat:
 
     async def shutdown(self):
         logger.info("Shutting down...")
+        self.send_task.cancel()
+        await self.send_task
         await wait(map(self.unlisten, self.channels))
         logger.info("Shut down.")
