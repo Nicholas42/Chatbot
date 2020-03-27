@@ -41,6 +41,7 @@ class OutgoingMessage:
     message: str
     delay: int = 0
     publicid: int = 1
+    bottag: int = 1
 
     def to_dict(self) -> dict:
         d = asdict(self)
