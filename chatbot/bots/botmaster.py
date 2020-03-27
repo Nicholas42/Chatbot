@@ -1,4 +1,4 @@
-from asyncio import as_completed
+from asyncio import as_completed, create_task, CancelledError
 from typing import Dict
 
 from chatbot.bots.abc import BotABC
@@ -15,6 +15,11 @@ class BotMaster:
         self.loader = Loader()
         self.bots = dict()
         self.bridge = bridge
+        self.listening_task = create_task(self.run())
+
+    async def run(self):
+        while True:
+            await self.react()
 
     async def react(self):
         msg = await self.bridge.get_incoming()
@@ -34,3 +39,10 @@ class BotMaster:
 
     def load_bot(self, bot_name):
         self.bots[bot_name] = self.loader.create_bot(bot_name)
+
+    async def shutdown(self):
+        try:
+            self.listening_task.cancel()
+            await self.listening_task
+        except CancelledError:
+            pass
