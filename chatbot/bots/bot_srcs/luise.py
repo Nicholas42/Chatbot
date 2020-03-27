@@ -15,7 +15,8 @@ class Luise:
         self.parser: pyparsing.ParserElement = pyparsing.Or(self.subs)
 
     def create_msg(self, message, replying_to: IncomingMessage):
-        return OutgoingMessage(channel=replying_to.channel, name=self.name, message=message, delay=replying_to.delay)
+        return OutgoingMessage(channel=replying_to.channel, name=self.name, message=message,
+                               delay=replying_to.delay + 1)
 
     def add_subparsers(self):
         for v in dir(self):
