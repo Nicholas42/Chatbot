@@ -36,6 +36,15 @@ class Luise:
         return call_parse_result(result, msg)
 
     @subparser
+    def help(self):
+        def f(args, msg):
+            return self.create_msg("Grade kann ich noch nicht so viel, nur was sagen und pongen, aber das wird sich "
+                                   "noch ändern!\nIch habe euch alle ganz doll lieb! *knuuuuuuuuuuuuuudel*", msg)
+
+        sub = Parser("help", func=f)
+        self.subs.append(sub.as_pp_parser())
+
+    @subparser
     def ping(self):
         def f(args, msg):
             return self.create_msg("pong", msg)
