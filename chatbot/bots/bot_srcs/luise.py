@@ -32,7 +32,7 @@ class Luise:
         except pyparsing.ParseBaseException:
             return None
 
-        return call_parse_result(result)
+        return call_parse_result(result, msg)
 
     @subparser
     def ping(self):
