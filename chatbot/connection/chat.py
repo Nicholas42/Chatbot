@@ -43,7 +43,7 @@ class Chat:
 
         return create_task(self.channels[channel].send_msg(message))
 
-    async def listen(self, channel):
+    def listen(self, channel):
         logging.info(f"Registering channel {channel}.")
         self.channels[channel] = Channel(channel)
 
