@@ -4,7 +4,7 @@ from pyparsing import pyparsing_common as ppc
 quoted_string = pp.dblQuotedString | pp.sglQuotedString
 
 common_parsers = {
-    int: pp.Word('-' + pp.nums, bodyChars=pp.nums, asKeyword=True).setParseAction(ppc.convertToInteger),
+    int: pp.Word('-' + pp.nums, bodyChars=pp.nums).setParseAction(ppc.convertToInteger) + pp.Suppress(pp.WordEnd()),
     str: quoted_string,
     bool: pp.Empty().setParseAction(lambda x: True)
 }
