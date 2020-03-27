@@ -1,4 +1,3 @@
-import json
 import logging
 from asyncio import create_task, CancelledError, Task, wait
 from typing import Dict
@@ -7,7 +6,6 @@ from websockets import ConnectionClosedError
 
 from chatbot import config
 from chatbot.interface.bridge import Bridge
-from chatbot.interface.message_helpers import MessageType
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from . import module_logger
 from .channel import Channel
