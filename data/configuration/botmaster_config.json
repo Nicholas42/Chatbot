@@ -1,7 +1,9 @@
 {
   "botmaster": {
     "default_bots": {
-      "luise": {}
+      "luise": {
+        "secret": null
+      }
     }
   }
 }
