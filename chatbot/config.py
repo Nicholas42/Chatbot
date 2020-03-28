@@ -15,19 +15,23 @@ class Config(dict):
                 d: dict = json.load(f)
                 if not isinstance(d, dict):
                     raise ValueError(f"Config file {self.path} does not provide a dictionary.")
-            ret = {}
-            for key in d:
-                if key.startswith("_"):
-                    ret[key[1:]] = self._load_hidden(key[1:], d[key])
-                else:
-                    ret[key] = d[key]
-            self.update(ret)
+            self.update(self._load_dict(d))
+
+    def _load_dict(self, inp, prefix=""):
+        out = dict()
+        for key, value in inp.items():
+            if isinstance(value, dict):
+                out[key] = self._load_dict(value, f"{prefix}{key.upper()}_")
+            elif key.startswith("_") and value is None:
+                out[key[1:]] = self._load_hidden(key[1:], prefix)
+            else:
+                out[key] = value
+        return out
 
     @staticmethod
-    def _load_hidden(key, value):
-        for i in value:
-            env_name = f"{key.upper()}_{i.upper()}"
-            value[i] = environ.get(env_name)
-            if not value[i]:
-                raise KeyError(f"Hidden config parameter {env_name} is needed.")
-        return value
+    def _load_hidden(key, prefix):
+        env_name = f"{prefix}{key.upper()}"
+        ret = environ.get(env_name)
+        if ret is None:
+            raise KeyError(f"Hidden config parameter {env_name} is needed.")
+        return ret

@@ -7,8 +7,8 @@
     "host": "chat.qed-verein.de",
     "path": "/websocket"
   },
-  "_user": {
-    "username": null,
-    "password": null
+  "user": {
+    "_username": null,
+    "_password": null
   }
 }

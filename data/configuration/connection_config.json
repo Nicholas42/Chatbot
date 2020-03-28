@@ -8,8 +8,8 @@
     "path": "/websocket",
     "login": "/rubychat/account"
   },
-  "_user": {
-    "username": null,
-    "password": null
+  "user": {
+    "_username": null,
+    "_password": null
   }
 }
