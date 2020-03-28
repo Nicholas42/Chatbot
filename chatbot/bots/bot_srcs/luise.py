@@ -11,18 +11,22 @@ class Luise:
         self.name = "Luise"
         self.subs = []
 
-        self.add_subparsers()
+        self.subcommands = self.collect_subcommands()
+        for i in self.subcommands:
+            i()
         self.parser: pyparsing.ParserElement = pyparsing.Or(self.subs)
 
     def create_msg(self, message, replying_to: IncomingMessage):
         return OutgoingMessage(channel=replying_to.channel, name=self.name, message=message,
                                delay=replying_to.delay + 1)
 
-    def add_subparsers(self):
+    def collect_subcommands(self):
+        ret = []
         for v in dir(self):
             func = getattr(self, v)
             if hasattr(func, "_subparser"):
-                func()
+                ret.append(func)
+        return ret
 
     def get_keyword(self):
         return pyparsing.CaselessKeyword(f"!{self.name}")
