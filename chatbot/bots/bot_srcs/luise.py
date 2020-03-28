@@ -9,23 +9,20 @@ from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 class Luise:
     def __init__(self):
         self.name = "Luise"
-        self.subs = []
 
         self.subcommands = self.collect_subcommands()
-        for i in self.subcommands:
-            i()
-        self.parser: pyparsing.ParserElement = pyparsing.Or(self.subs)
+        self.parser: pyparsing.ParserElement = pyparsing.Or(self.subcommands.values())
 
     def create_msg(self, message, replying_to: IncomingMessage):
         return OutgoingMessage(channel=replying_to.channel, name=self.name, message=message,
                                delay=replying_to.delay + 1)
 
     def collect_subcommands(self):
-        ret = []
+        ret = {}
         for v in dir(self):
             func = getattr(self, v)
             if hasattr(func, "_subparser"):
-                ret.append(func)
+                ret[func] = func()
         return ret
 
     def get_keyword(self):
@@ -46,7 +43,7 @@ class Luise:
                                    "noch ändern!\nIch habe euch alle ganz doll lieb! *knuuuuuuuuuuuuuudel*", msg)
 
         sub = Parser("help", func=f)
-        self.subs.append(sub.as_pp_parser())
+        return sub.as_pp_parser()
 
     @subparser
     def ping(self):
@@ -54,7 +51,7 @@ class Luise:
             return self.create_msg("pong", msg)
 
         sub = Parser("ping", func=f)
-        self.subs.append(sub.as_pp_parser())
+        return sub.as_pp_parser()
 
     @subparser
     def slap(self):
@@ -63,7 +60,7 @@ class Luise:
 
         sub = Parser("slap", func=f)
         sub.add_positional_argument("target", value_parser=rest_of_string)
-        self.subs.append(sub.as_pp_parser())
+        return sub.as_pp_parser()
 
     @subparser
     def hug(self):
@@ -72,7 +69,7 @@ class Luise:
 
         sub = Parser("hug", func=f)
         sub.add_positional_argument("target")
-        self.subs.append(sub.as_pp_parser())
+        return sub.as_pp_parser()
 
     @subparser
     def say(self):
@@ -82,7 +79,7 @@ class Luise:
         sub = Parser("say", func=f)
         sub.add_positional_argument("rest", value_parser=rest_of_string)
 
-        self.subs.append(sub.as_pp_parser())
+        return sub.as_pp_parser()
 
 
 BotABC.register(Luise)
