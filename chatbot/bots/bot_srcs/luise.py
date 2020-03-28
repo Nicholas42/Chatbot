@@ -113,6 +113,18 @@ class Luise:
 
         return sub.as_pp_parser()
 
+    @subparser
+    def featurerequest(self):
+        """ Ich wünsch mir was! Und wenn ich gaaaaanz fest dran glaube wird es auch Wirklichkeit!"""
+
+        def f(args, msg):
+            return self.create_msg(f"Ich will {args['rest']}!", msg)
+
+        sub = Parser("featurerequest", func=f)
+        sub.add_positional_argument("rest", value_parser=rest_of_string)
+
+        return sub.as_pp_parser()
+
 
 BotABC.register(Luise)
 
