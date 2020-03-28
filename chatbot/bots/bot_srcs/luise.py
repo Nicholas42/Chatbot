@@ -64,7 +64,7 @@ class Luise:
         """ Ich schlage jemanden! -.- """
 
         def f(args, msg):
-            return self.create_msg(f"{self.name} schlägt {args['target']}.", msg)
+            return self.create_msg(f"*schlägt {args['target']}*", msg)
 
         sub = Parser("slap", func=f)
         sub.add_positional_argument("target", value_parser=rest_of_string)
@@ -78,7 +78,7 @@ class Luise:
             return self.create_msg(f"*knuddelt {args['target']}*", msg)
 
         sub = Parser("hug", func=f)
-        sub.add_positional_argument("target")
+        sub.add_positional_argument("target", value_parser=rest_of_string)
         return sub.as_pp_parser()
 
     @subparser
