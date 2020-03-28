@@ -46,7 +46,7 @@ class Luise:
         def f(args, msg):
             # They are not necessarily all known when help is initialized.
             help_msg = f"Hallo, ich bin {self.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
-            help_msg += "\n".join(f"{v.command_word}:\t {k.__help__}" for k, v in self.subcommands.items())
+            help_msg += "\n".join(f"{k.__name__}:\n\t {k.__doc__}" for k in self.subcommands)
             return self.create_msg(help_msg, msg)
 
         sub = Parser("help", func=f)
