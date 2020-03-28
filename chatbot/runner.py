@@ -1,4 +1,4 @@
-from asyncio import wait
+from aioconsole.console import interact
 
 from chatbot import config
 from chatbot.bots.botmaster import BotMaster
@@ -15,7 +15,7 @@ class Runner:
         self.botmaster = BotMaster(self.bridge, _config)
 
     async def wait_running(self):
-        await wait([self.botmaster.listening_task, self.chat.send_task])
+        await interact(interact(locals=locals()))
 
     async def shutdown(self):
         await self.chat.shutdown()
