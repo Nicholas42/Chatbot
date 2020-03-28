@@ -11,6 +11,7 @@ from chatbot import config
 class Luise:
     def __init__(self):
         self.name = "Luise"
+        self.config = config["botmaster"]["default_bots"]["luise"]
 
         self.subcommands = dict()
         self.collect_subcommands()
@@ -99,7 +100,7 @@ class Luise:
     @subparser
     def decide(self):
         """ Ich helfe dir, dich zu entscheiden! """
-        salt = config["botmaster"]["luise"]["secret"].encode()
+        salt = self.config["secret"].encode()
 
         def f(args, msg):
             res = hashlib.sha256(args["rest"].encode() + salt).digest()
