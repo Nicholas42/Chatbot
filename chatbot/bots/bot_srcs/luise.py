@@ -24,11 +24,8 @@ class Luise:
         for v in dir(self):
             func = getattr(self, v)
             if hasattr(func, "_subparser"):
-                self.subcommands[func] = None
+                self.subcommands[func] = func()
 
-        # So all are known beforehand
-        for i in self.subcommands:
-            self.subcommands[i] = i()
         return self.subcommands
 
     def get_keyword(self):
@@ -46,10 +43,10 @@ class Luise:
     def help(self):
         """ Ich sag dir, wie du mit mir umgehen sollst! """
 
-        help_msg = f"Hallo, ich bin {self.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
-        help_msg += "\n".join(f"{v.command_word}:\t {k.__help__}" for k, v in self.subcommands.items())
-
         def f(args, msg):
+            # They are not necessarily all known when help is initialized.
+            help_msg = f"Hallo, ich bin {self.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
+            help_msg += "\n".join(f"{v.command_word}:\t {k.__help__}" for k, v in self.subcommands.items())
             return self.create_msg(help_msg, msg)
 
         sub = Parser("help", func=f)
