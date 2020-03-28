@@ -38,15 +38,21 @@ class Luise:
 
     @subparser
     def help(self):
+        """ Ich sag dir, wie du mit mir umgehen sollst! """
+
+        help_msg = f"Hallo, ich bin {self.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
+        help_msg += "\n".join(f"{v.command_word}:\t {k.__help__}" for k, v in self.subcommands.items())
+
         def f(args, msg):
-            return self.create_msg("Grade kann ich noch nicht so viel, nur was sagen und pongen, aber das wird sich "
-                                   "noch ändern!\nIch habe euch alle ganz doll lieb! *knuuuuuuuuuuuuuudel*", msg)
+            return self.create_msg(help_msg, msg)
 
         sub = Parser("help", func=f)
         return sub.as_pp_parser()
 
     @subparser
     def ping(self):
+        """ Pong! """
+
         def f(args, msg):
             return self.create_msg("pong", msg)
 
@@ -55,6 +61,8 @@ class Luise:
 
     @subparser
     def slap(self):
+        """ Ich schlage jemanden! -.- """
+
         def f(args, msg):
             return self.create_msg(f"{self.name} schlägt {args['target']}.", msg)
 
@@ -64,6 +72,8 @@ class Luise:
 
     @subparser
     def hug(self):
+        """ Ich knuddel jemanden! :-) """
+
         def f(args, msg):
             return self.create_msg(f"*knuddelt {args['target']}*", msg)
 
@@ -73,6 +83,8 @@ class Luise:
 
     @subparser
     def say(self):
+        """ Ich sage etwas! """
+
         def f(args, msg):
             return self.create_msg(args["rest"], msg)
 
