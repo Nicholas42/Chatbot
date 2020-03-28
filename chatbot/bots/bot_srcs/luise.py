@@ -24,7 +24,11 @@ class Luise:
         for v in dir(self):
             func = getattr(self, v)
             if hasattr(func, "_subparser"):
-                ret[func] = func()
+                ret[func] = None
+
+        # So all are known beforehand
+        for i in ret:
+            ret[i] = i()
         return ret
 
     def get_keyword(self):
