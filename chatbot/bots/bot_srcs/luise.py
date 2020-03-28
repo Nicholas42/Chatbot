@@ -12,7 +12,8 @@ class Luise:
     def __init__(self):
         self.name = "Luise"
 
-        self.subcommands = self.collect_subcommands()
+        self.subcommands = dict()
+        self.collect_subcommands()
         self.parser: pyparsing.ParserElement = pyparsing.Or(self.subcommands.values())
 
     def create_msg(self, message, replying_to: IncomingMessage):
@@ -20,16 +21,15 @@ class Luise:
                                delay=replying_to.delay + 1)
 
     def collect_subcommands(self):
-        ret = {}
         for v in dir(self):
             func = getattr(self, v)
             if hasattr(func, "_subparser"):
-                ret[func] = None
+                self.subcommands[func] = None
 
         # So all are known beforehand
-        for i in ret:
-            ret[i] = i()
-        return ret
+        for i in self.subcommands:
+            self.subcommands[i] = i()
+        return self.subcommands
 
     def get_keyword(self):
         return pyparsing.CaselessKeyword(f"!{self.name}")
