@@ -1,7 +1,7 @@
 {
   "botmaster": {
-    "default_bots": [
-      "luise"
-    ]
+    "default_bots": {
+      "luise": {}
+    }
   }
 }
