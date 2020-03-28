@@ -96,6 +96,7 @@ class Luise:
 
         return sub.as_pp_parser()
 
+    @subparser
     def decide(self):
         """ Ich helfe dir, dich zu entscheiden! """
         salt = config["botmaster"]["luise"]["secret"].encode()
