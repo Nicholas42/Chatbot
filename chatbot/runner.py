@@ -15,7 +15,10 @@ class Runner:
         self.botmaster = BotMaster(self.bridge, _config)
 
     async def wait_running(self):
-        await interact(interact(locals=locals()))
+        d = locals().copy()
+        d.update(globals())
+
+        await interact(locals=d)
 
     async def shutdown(self):
         await self.chat.shutdown()
