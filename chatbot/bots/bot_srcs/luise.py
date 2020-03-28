@@ -1,9 +1,11 @@
 import pyparsing
+import hashlib
 
 from chatbot.bots.abc import BotABC
 from chatbot.bots.utils.parsing.command_parser import Parser, subparser, call_parse_result
 from chatbot.bots.utils.parsing.common import rest_of_string
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
+from chatbot import config
 
 
 class Luise:
@@ -92,6 +94,18 @@ class Luise:
         sub.add_positional_argument("rest", value_parser=rest_of_string)
 
         return sub.as_pp_parser()
+
+    def decide(self):
+        """ Ich helfe dir, dich zu entscheiden! """
+        salt = config["botmaster"]["luise"]["secret"].encode()
+
+        def f(args, msg):
+            res = hashlib.sha256(args["rest"].encode() + salt).digest()
+            decision = '+' if int(res[0]) % 2 == 0 else '-'
+            return self.create_msg(decision, msg)
+
+        sub = Parser("decide", func=f)
+        sub.add_positional_argument("rest", value_parser=rest_of_string)
 
 
 BotABC.register(Luise)
