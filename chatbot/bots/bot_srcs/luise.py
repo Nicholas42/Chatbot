@@ -1,11 +1,12 @@
-import pyparsing
 import hashlib
 
+import pyparsing
+
+from chatbot import config
 from chatbot.bots.abc import BotABC
 from chatbot.bots.utils.parsing.command_parser import Parser, subparser, call_parse_result
 from chatbot.bots.utils.parsing.common import rest_of_string
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
-from chatbot import config
 
 
 class Luise:
@@ -109,6 +110,8 @@ class Luise:
 
         sub = Parser("decide", func=f)
         sub.add_positional_argument("rest", value_parser=rest_of_string)
+
+        return sub.as_pp_parser()
 
 
 BotABC.register(Luise)
