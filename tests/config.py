@@ -17,3 +17,4 @@ class TestConfig(TestCase):
     def test_hidden(self):
         self.assertEqual(self.config["user"]["username"], "Testy")
         self.assertEqual(self.config["user"]["password"], "Safe")
+        self.assertEqual(self.config["user"]["stuff"], {"secret": "VERY SECRET", "not secret": None})
