@@ -1,12 +1,24 @@
 from functools import wraps
 
 from chatbot.bots.utils.parsing.command_parser import Parser
+from chatbot.interface.messages import OutgoingMessage
 
 
 class BaseBot:
 
     def __init__(self):
         self.commands = dict()
+        self.name = self.__class__.__name__
+
+    def create_msg(self, incoming, msg):
+        if isinstance(msg, OutgoingMessage):
+            return msg
+        elif isinstance(msg, str):
+            return OutgoingMessage(message=msg, name=self.name, channel=incoming.channel, delay=incoming.delay + 1)
+        else:
+            d = dict(channel=incoming.channel, delay=incoming.delay + 1)
+            d.update(msg)
+            return OutgoingMessage(**d)
 
     async def react(self, msg):
         return NotImplemented  # This should raise
