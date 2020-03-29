@@ -23,7 +23,7 @@ class Runner:
         d["chat"] = self.chat
         d["exit"] = lambda: self.server.close()
 
-        self.server = await start_console_server(port=9001, locals=d)
+        self.server = await start_console_server(host="0.0.0.0", port=5000, locals=d)
         await self.server.wait_closed()
 
     async def shutdown(self):
