@@ -1,7 +1,8 @@
 import pyparsing as pp
 from pyparsing import pyparsing_common as ppc
 
-uword = pp.SkipTo(pp.WordEnd())
+WHITE_CHARS = pp.ParserElement.DEFAULT_WHITE_CHARS
+uword = pp.Suppress(pp.SkipTo(pp.WordStart())) + pp.CharsNotIn(WHITE_CHARS)
 
 common_parsers = {
     int: pp.Combine(pp.Optional('-') + pp.Word(pp.nums)).setParseAction(ppc.convertToInteger) + pp.Suppress(

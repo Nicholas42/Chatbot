@@ -3,6 +3,7 @@ from unittest import TestCase
 import pyparsing
 
 from chatbot.bots.utils.parsing import common
+from chatbot.bots.utils.parsing.common import uword, rest_of_string
 
 
 def _test_parser(test_case: TestCase, parser, tests, results, fail_tests):
@@ -26,6 +27,14 @@ class TestCommon(TestCase):
         tests_results = [0, 0, -121, 0]
 
         _test_parser(self, common.common_parsers[int], tests, tests_results, fail_tests)
+
+    def test_uword_parser(self):
+        parser = uword + rest_of_string
+        tests = ["Hello", "    Hi", "This is a test"]
+        fail_tests = [""]
+        test_results = ["Hello", "Hi", "This"]
+
+        _test_parser(self, parser, tests, test_results, fail_tests)
 
     def test_str_parser(self):
         tests = ["test", "'test'", "'Hello World'", "\"'Hello World'\"", "Hello World"]
