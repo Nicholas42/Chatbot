@@ -21,6 +21,7 @@ class Luise(BaseBot):
         self.config = config["botmaster"]["default_bots"]["luise"]
 
         self.parser: pyparsing.ParserElement = pyparsing.Empty()
+        self.botmaster = None
 
     def reload_parsers(self):
         self.parser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
@@ -100,6 +101,7 @@ def featurerequest(args, **kwargs):
     return f"Ich will {args['_rest']}!"
 
 
-def create_bot():
+def create_bot(botmaster):
+    luise.botmaster = botmaster
     luise.reload_parsers()
     return luise

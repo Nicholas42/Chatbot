@@ -7,5 +7,5 @@ class Echo(BaseBot):
         print(message)
 
 
-def create_bot():
+def create_bot(*args, **kwargs):
     return Echo()

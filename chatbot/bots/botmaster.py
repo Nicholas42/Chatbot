@@ -44,7 +44,7 @@ class BotMaster:
         self.load_bot(bot_name)
 
     def load_bot(self, bot_name):
-        self.bots[bot_name] = self.loader.create_bot(bot_name)
+        self.bots[bot_name] = self.loader.create_bot(bot_name, self)
 
     async def shutdown(self):
         try:
