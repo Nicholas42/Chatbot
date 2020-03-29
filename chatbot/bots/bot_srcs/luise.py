@@ -1,11 +1,18 @@
 import hashlib
+import random
 
 import pyparsing
 
 from chatbot import config
 from chatbot.bots.base import BaseBot
 from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
+from chatbot.bots.utils.parsing.common import uword
 from chatbot.interface.messages import IncomingMessage
+
+
+def _lalala():
+    length = random.randint(8, 14)
+    return "la" + "a".join(random.choices(["l", "ll"], weights=[5, 1]), k=length) + "a"
 
 
 class Luise(BaseBot):
@@ -21,7 +28,7 @@ class Luise(BaseBot):
     def get_keyword(self):
         return pyparsing.CaselessKeyword(f"!{self.name}")
 
-    async def react(self, msg: IncomingMessage):
+    async def _react(self, msg: IncomingMessage):
         try:
             result = (self.get_keyword() + self.parser).parseString(msg.message)
         except pyparsing.ParseBaseException as e:

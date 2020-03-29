@@ -2,7 +2,7 @@ from functools import wraps
 from typing import Dict, Any, Callable
 
 from chatbot.bots.utils.parsing.command_parser import Parser
-from chatbot.interface.messages import OutgoingMessage
+from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 
 
 class BaseBot:
@@ -11,6 +11,7 @@ class BaseBot:
     def __init__(self):
         self.commands = dict()
         self.name = self.__class__.__name__
+        self.react_on_bots = False
 
     def create_msg(self, msg, incoming):
         if isinstance(msg, OutgoingMessage):
@@ -22,8 +23,10 @@ class BaseBot:
             d.update(msg)
             return OutgoingMessage(**d)
 
-    async def react(self, msg):
-        return NotImplemented  # This should raise
+    async def react(self, msg: IncomingMessage):
+        if not msg.bottag or self.react_on_bots:
+            return await self._react(msg)
+        return None
 
     async def shutdown(self):
         pass
