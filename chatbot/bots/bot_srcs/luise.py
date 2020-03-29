@@ -11,7 +11,6 @@ from chatbot.interface.messages import IncomingMessage
 class Luise(BaseBot):
     def __init__(self):
         super().__init__()
-        self.name = "Testuise"
         self.config = config["botmaster"]["default_bots"]["luise"]
 
         self.parser: pyparsing.ParserElement = pyparsing.Empty()
