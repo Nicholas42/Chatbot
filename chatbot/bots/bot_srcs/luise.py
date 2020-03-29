@@ -30,7 +30,7 @@ class Luise(BaseBot):
 
     def _rename(self):
         self.name = self.__class__.__name__
-        self.botmaster.bridge.put_incoming_nowait(self.create_msg("I am back! :-)", self.rename_msg))
+        self.botmaster.bridge.put_outgoing_nowait(self.create_msg("I am back! :-)", self.rename_msg))
 
     def reset_rename(self, message):
         if self.__class__.__name__ != self.name:
