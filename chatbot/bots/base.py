@@ -8,6 +8,9 @@ class BaseBot:
     def __init__(self):
         self.commands = dict()
 
+    async def react(self, msg):
+        return NotImplemented  # This should raise
+
     async def shutdown(self):
         pass
 
