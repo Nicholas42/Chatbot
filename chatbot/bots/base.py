@@ -12,7 +12,7 @@ class BaseBot:
         self.commands = dict()
         self.name = self.__class__.__name__
 
-    def create_msg(self, incoming, msg):
+    def create_msg(self, msg, incoming):
         if isinstance(msg, OutgoingMessage):
             return msg
         elif isinstance(msg, str):
@@ -33,8 +33,8 @@ class BaseBot:
             name = kwargs.get("name", f.__name__)
 
             @wraps(f)
-            def decorated(*f_args, **f_kwargs):
-                return f(bot=self, *f_args, **f_kwargs)
+            def decorated(msg, *f_args, **f_kwargs):
+                return self.create_msg(f(*f_args, msg=msg, bot=self, **f_kwargs), msg)
 
             parser = Parser(name, func=decorated)
             for i in args:

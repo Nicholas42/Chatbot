@@ -11,9 +11,9 @@ def subparser(f):
     return f
 
 
-def call_parse_result(res: pp.ParseResults, *args, **kwargs):
+def call_parse_result(res: pp.ParseResults, msg, *args, **kwargs):
     d = res.asDict()
-    return d["command"](d["options"], *args, **kwargs)
+    return d["command"](msg, *args, args=d["options"], **kwargs)
 
 
 class Parser:
