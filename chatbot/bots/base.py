@@ -42,7 +42,7 @@ class BaseBot:
             for k, v in kwargs.items():
                 parser.add_optional_argument(**v)
 
-            self.commands[name] = parser
+            self.commands[decorated] = parser
             return decorated
 
         return decorator
