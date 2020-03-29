@@ -32,7 +32,7 @@ class BaseBot:
         def decorator(f):
             @wraps(f)
             def decorated(*f_args, **f_kwargs):
-                return f(self, *f_args, **f_kwargs)
+                return f(bot=self, *f_args, **f_kwargs)
 
             parser = Parser(name, func=decorated)
             for i in args:
