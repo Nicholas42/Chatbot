@@ -8,6 +8,7 @@ from chatbot.bots.base import BaseBot
 from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
 from chatbot.bots.utils.parsing.common import uword
 from chatbot.interface.messages import IncomingMessage
+from chatbot.utils.async_sched import AsyncScheduler
 
 
 def _lalala():
@@ -16,12 +17,25 @@ def _lalala():
 
 
 class Luise(BaseBot):
+    _time_out = 900  # seconds until luise renames herself back
+
     def __init__(self):
         super().__init__()
         self.config = config["botmaster"]["default_bots"]["luise"]
 
         self.parser: pyparsing.ParserElement = pyparsing.Empty()
         self.botmaster = None
+        self.rename_msg = None
+        self.timer = AsyncScheduler(self._time_out, self._rename)
+
+    def _rename(self):
+        self.name = self.__class__.__name__
+        self.botmaster.bridge.put_incoming_nowait(self.create_msg("I am back! :-)", self.rename_msg))
+
+    async def reset_rename(self, message):
+        if self.__class__.__name__ != self.name:
+            self.rename_msg = message
+            await self.timer.reset(self._time_out)
 
     def reload_parsers(self):
         self.parser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
@@ -34,6 +48,8 @@ class Luise(BaseBot):
             result = (self.get_keyword() + self.parser).parseString(msg.message)
         except pyparsing.ParseBaseException as e:
             return None
+
+        await self.reset_rename(msg)
 
         return call_parse_result(result, msg)
 
@@ -50,9 +66,10 @@ def help(bot: Luise, **kwargs):
 
 
 @luise.command({"name": "new_name", "value_parser": uword})
-def be(bot, args, **kwargs):
+async def be(bot, args, msg, **kwargs):
     """ Ich verwandel mich in jemand anderen! """
     bot.name = args["new_name"]
+    bot.reset_rename(msg)
 
     return _lalala()
 
