@@ -2,7 +2,7 @@ from typing import Optional, Callable
 
 import pyparsing as pp
 
-from chatbot.bots.utils.parsing.common import intersperse_parser, update_dict
+from chatbot.bots.utils.parsing.common import intersperse_parser, update_dict, rest_of_string
 from .common import common_parsers
 
 
@@ -50,7 +50,7 @@ class Parser:
         self.pos_args.append(value_parser)
 
     def as_pp_parser(self) -> pp.ParserElement:
-        pos_args = self.pos_args or [pp.Empty()]
+        pos_args = self.pos_args + [rest_of_string("_rest").setName("_rest").addCondition(lambda x: {"rest": [0]})]
         if self.opt_args:
             optionals = pp.Or(self.opt_args)
             args = intersperse_parser(pos_args, optionals)
