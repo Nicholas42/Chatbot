@@ -24,18 +24,12 @@ In `chatbot/bots/bot_srcs` you find two examples of very simple bots.
 They need the following things:
 
 ```python
-from chatbot.bots.abc import BotABC # for marking the class as a bot.import 
-from chatbot.interface.messages import OutgoingMessage, IncomingMessage
+from chatbot.bots.base import BaseBot # for marking the class as a bot.import 
 
-class MyBot:
-    async def react(self, incoming_message):  # If you don't know what that async means, you can ignore it
+class MyBot(BaseBot):
+    async def _react(self, incoming_message):  # If you don't know what that async means, you can ignore it
         # do some stuff
-        return OutgoingMessage( message="Hi", 
-                                name="MyBot", 
-                                channel= incoming_message.channel,  # Or any other channel we are listening to
-                                delay = incoming_message.delay + 1) # So we answer on the right message
-
-BotABC.register(MyBot) # So we know that it is a bot.
+        return f"Hi {incoming_message.name}!"
 
 def create_bot():   # The loader does not need to know the class name
     return MyBot()
