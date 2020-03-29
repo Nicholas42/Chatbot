@@ -12,7 +12,7 @@ from chatbot.interface.messages import IncomingMessage
 
 def _lalala():
     length = random.randint(8, 14)
-    return "la" + "a".join(random.choices(["l", "ll"], weights=[5, 1]), k=length) + "a"
+    return "la" + "a".join(random.choices(["l", "ll"], weights=[5, 1], k=length)) + "a"
 
 
 class Luise(BaseBot):
@@ -46,6 +46,14 @@ def help(bot: Luise, **kwargs):
 
     help_msg = f"Hallo, ich bin {bot.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
     return help_msg + "\n".join(f"{v.command_word}:\n\t {k.__doc__}" for k, v in bot.commands.items())
+
+
+@luise.command({"name": "new_name", "value_parser": uword})
+def be(bot, args, **kwargs):
+    """ Ich verwandel mich in jemand anderen! """
+    bot.name = args["new_name"]
+
+    return _lalala()
 
 
 @luise.command()
