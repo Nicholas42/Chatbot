@@ -1,15 +1,10 @@
-from chatbot.bots.abc import BotABC
+from chatbot.bots.base import BaseBot
 
 
-class Echo:
-    def __init__(self):
-        pass
+class Echo(BaseBot):
 
     async def react(self, message):
         print(message)
-
-
-BotABC.register(Echo)
 
 
 def create_bot():
