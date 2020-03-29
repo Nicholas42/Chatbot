@@ -3,32 +3,21 @@ import hashlib
 import pyparsing
 
 from chatbot import config
-from chatbot.bots.abc import BotABC
-from chatbot.bots.utils.parsing.command_parser import Parser, subparser, call_parse_result
-from chatbot.bots.utils.parsing.common import rest_of_string
-from chatbot.interface.messages import OutgoingMessage, IncomingMessage
+from chatbot.bots.base import BaseBot
+from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
+from chatbot.interface.messages import IncomingMessage
 
 
-class Luise:
+class Luise(BaseBot):
     def __init__(self):
-        self.name = "Luise"
+        super().__init__()
+        self.name = "Testuise"
         self.config = config["botmaster"]["default_bots"]["luise"]
 
-        self.subcommands = dict()
-        self.collect_subcommands()
-        self.parser: pyparsing.ParserElement = pyparsing.Or(self.subcommands.values())
+        self.parser: pyparsing.ParserElement = pyparsing.Empty()
 
-    def create_msg(self, message, replying_to: IncomingMessage):
-        return OutgoingMessage(channel=replying_to.channel, name=self.name, message=message,
-                               delay=replying_to.delay + 1)
-
-    def collect_subcommands(self):
-        for v in dir(self):
-            func = getattr(self, v)
-            if hasattr(func, "_subparser"):
-                self.subcommands[func] = func()
-
-        return self.subcommands
+    def reload_parsers(self):
+        self.parser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
 
     def get_keyword(self):
         return pyparsing.CaselessKeyword(f"!{self.name}")
@@ -36,98 +25,67 @@ class Luise:
     async def react(self, msg: IncomingMessage):
         try:
             result = (self.get_keyword() + self.parser).parseString(msg.message)
-        except pyparsing.ParseBaseException:
+        except pyparsing.ParseBaseException as e:
             return None
 
         return call_parse_result(result, msg)
 
-    @subparser
-    def help(self):
-        """ Ich sag dir, wie du mit mir umgehen sollst! """
 
-        def f(args, msg):
-            # They are not necessarily all known when help is initialized.
-            help_msg = f"Hallo, ich bin {self.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
-            help_msg += "\n".join(f"{k.__name__}:\n\t {k.__doc__}" for k in self.subcommands)
-            return self.create_msg(help_msg, msg)
-
-        sub = Parser("help", func=f)
-        return sub.as_pp_parser()
-
-    @subparser
-    def ping(self):
-        """ Pong! """
-
-        def f(args, msg):
-            return self.create_msg("pong", msg)
-
-        sub = Parser("ping", func=f)
-        return sub.as_pp_parser()
-
-    @subparser
-    def slap(self):
-        """ Ich schlage jemanden! -.- """
-
-        def f(args, msg):
-            return self.create_msg(f"*schlägt {args['target']}*", msg)
-
-        sub = Parser("slap", func=f)
-        sub.add_positional_argument("target", value_parser=rest_of_string)
-        return sub.as_pp_parser()
-
-    @subparser
-    def hug(self):
-        """ Ich knuddel jemanden! :-) """
-
-        def f(args, msg):
-            return self.create_msg(f"*knuddelt {args['target']}*", msg)
-
-        sub = Parser("hug", func=f)
-        sub.add_positional_argument("target", value_parser=rest_of_string)
-        return sub.as_pp_parser()
-
-    @subparser
-    def say(self):
-        """ Ich sage etwas! """
-
-        def f(args, msg):
-            return self.create_msg(args["rest"], msg)
-
-        sub = Parser("say", func=f)
-        sub.add_positional_argument("rest", value_parser=rest_of_string)
-
-        return sub.as_pp_parser()
-
-    @subparser
-    def decide(self):
-        """ Ich helfe dir, dich zu entscheiden! """
-        salt = self.config["secret"].encode()
-
-        def f(args, msg):
-            res = hashlib.sha256(args["rest"].encode() + salt).digest()
-            decision = '+' if int(res[0]) % 2 == 0 else '-'
-            return self.create_msg(decision, msg)
-
-        sub = Parser("decide", func=f)
-        sub.add_positional_argument("rest", value_parser=rest_of_string)
-
-        return sub.as_pp_parser()
-
-    @subparser
-    def featurerequest(self):
-        """ Ich wünsch mir was! Und wenn ich gaaaaanz fest dran glaube wird es auch Wirklichkeit!"""
-
-        def f(args, msg):
-            return self.create_msg(f"Ich will {args['rest']}!", msg)
-
-        sub = Parser("featurerequest", func=f)
-        sub.add_positional_argument("rest", value_parser=rest_of_string)
-
-        return sub.as_pp_parser()
+luise = Luise()
 
 
-BotABC.register(Luise)
+@luise.command()
+def help(bot: Luise, **kwargs):
+    """ Ich sag dir, wie du mit mir umgehen sollst! """
+
+    help_msg = f"Hallo, ich bin {bot.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
+    return help_msg + "\n".join(f"{v.command_word}:\n\t {k.__doc__}" for k, v in bot.commands.items())
+
+
+@luise.command()
+def ping(**kwargs):
+    """ Pong! """
+
+    return "pong"
+
+
+@luise.command()
+def slap(**kwargs):
+    """ Ich schlage jemanden! -.- """
+
+    return f"*schlägt {['_rest']}*"
+
+
+@luise.command()
+def hug(args, **kwargs):
+    """ Ich knuddel jemanden! :-) """
+
+    return f"*knuddelt {args['_rest']}*"
+
+
+@luise.command()
+def say(args, **kwargs):
+    """ Ich sage etwas! """
+
+    return args["_rest"]
+
+
+@luise.command()
+def decide(bot, args, **kwargs):
+    """ Ich helfe dir, dich zu entscheiden! """
+    salt = bot.config["secret"].encode()
+
+    res = hashlib.sha256(args["_rest"].encode() + salt).digest()
+    return '+' if int(res[0]) % 2 == 0 else '-'
+
+
+@luise.command()
+def featurerequest(args, **kwargs):
+    """ Ich wünsch mir was! Und wenn ich gaaaaanz fest dran glaube wird es auch Wirklichkeit!"""
+
+    return f"Ich will {args['_rest']}!"
 
 
 def create_bot():
-    return Luise()
+    luise.reload_parsers()
+    return luise
