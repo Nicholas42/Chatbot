@@ -1,10 +1,12 @@
 from functools import wraps
+from typing import Dict, Any, Callable
 
 from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.interface.messages import OutgoingMessage
 
 
 class BaseBot:
+    commands: Dict[Callable, Parser]
 
     def __init__(self):
         self.commands = dict()
