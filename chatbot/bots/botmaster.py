@@ -2,9 +2,12 @@ from asyncio import as_completed, create_task, CancelledError, wait
 from typing import Dict
 
 from chatbot import config
+from chatbot.bots import module_logger
 from chatbot.bots.base import BaseBot
 from chatbot.bots.loader import Loader
 from chatbot.interface.bridge import Bridge
+
+logger = module_logger.getChild("botmaster")
 
 
 class BotMaster:
@@ -25,7 +28,10 @@ class BotMaster:
 
     async def run(self):
         while True:
-            await self.react()
+            try:
+                await self.react()
+            except Exception as e:
+                logger.exception(e)
 
     async def react(self):
         msg = await self.bridge.get_incoming()
