@@ -49,10 +49,10 @@ def ping(**kwargs):
 
 
 @luise.command()
-def slap(**kwargs):
+def slap(args, **kwargs):
     """ Ich schlage jemanden! -.- """
 
-    return f"*schlägt {['_rest']}*"
+    return f"*schlägt {args['_rest']}*"
 
 
 @luise.command()
