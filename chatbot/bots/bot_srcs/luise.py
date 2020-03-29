@@ -32,10 +32,10 @@ class Luise(BaseBot):
         self.name = self.__class__.__name__
         self.botmaster.bridge.put_incoming_nowait(self.create_msg("I am back! :-)", self.rename_msg))
 
-    async def reset_rename(self, message):
+    def reset_rename(self, message):
         if self.__class__.__name__ != self.name:
             self.rename_msg = message
-            await self.timer.reset(self._time_out)
+            self.timer.reset(self._time_out)
 
     def reload_parsers(self):
         self.parser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
@@ -49,7 +49,7 @@ class Luise(BaseBot):
         except pyparsing.ParseBaseException as e:
             return None
 
-        await self.reset_rename(msg)
+        self.reset_rename(msg)
 
         return call_parse_result(result, msg)
 
@@ -66,7 +66,7 @@ def help(bot: Luise, **kwargs):
 
 
 @luise.command({"name": "new_name", "value_parser": uword})
-async def be(bot, args, msg, **kwargs):
+def be(bot, args, msg, **kwargs):
     """ Ich verwandel mich in jemand anderen! """
     bot.name = args["new_name"]
     bot.reset_rename(msg)

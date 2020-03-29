@@ -14,16 +14,12 @@ class AsyncScheduler:
         await sleep(self.timeout)
         return self.callback()
 
-    async def reset(self, new_timeout=None):
+    def reset(self, new_timeout=None):
         if self.task is not None:
-            await self.cancel()
+            self.cancel()
         if new_timeout is not None:
             self.timeout = new_timeout
         self.run()
 
-    async def cancel(self):
+    def cancel(self):
         self.task.cancel()
-        try:
-            return await self.task()
-        except CancelledError:
-            pass
