@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from typing import Dict, Any
 
-from chatbot.bots.abc import BotABC
+from chatbot.bots.base import BaseBot
 
 
 class Loader:
@@ -13,7 +13,7 @@ class Loader:
     def __init__(self):
         self.bots = dict()
 
-    def create_bot(self, bot_name: str, *args, **kwargs) -> BotABC:
+    def create_bot(self, bot_name: str, *args, **kwargs) -> BaseBot:
         if bot_name not in self.bots:
             self.load_bot(bot_name)
 

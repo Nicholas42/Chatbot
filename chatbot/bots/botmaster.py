@@ -2,14 +2,14 @@ from asyncio import as_completed, create_task, CancelledError, wait
 from typing import Dict
 
 from chatbot import config
-from chatbot.bots.abc import BotABC
+from chatbot.bots.base import BaseBot
 from chatbot.bots.loader import Loader
 from chatbot.interface.bridge import Bridge
 
 
 class BotMaster:
     loader: Loader
-    bots: Dict[str, BotABC]
+    bots: Dict[str, BaseBot]
     bridge: Bridge
 
     def __init__(self, bridge: Bridge, _config=None):
