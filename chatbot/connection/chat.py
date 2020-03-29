@@ -37,16 +37,16 @@ class Chat:
         try:
             while True:
                 msg = await self.bridge.get_outgoing()
-                self._send_msg(msg)
+                await self._send_msg(msg)
         except CancelledError:
             raise
 
-    def _send_msg(self, message: OutgoingMessage):
+    async def _send_msg(self, message: OutgoingMessage):
         channel = message.channel
         if channel not in self.channels:
             raise KeyError(f"Not listening to channel {channel}.")
 
-        return create_task(self.channels[channel].send_msg(message))
+        return await self.channels[channel].send_msg(message)
 
     def listen(self, channel):
         logging.info(f"Registering channel {channel}.")
