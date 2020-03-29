@@ -28,8 +28,10 @@ class BaseBot:
     async def shutdown(self):
         pass
 
-    def command(self, name, *args, **kwargs):
+    def command(self, *args, **kwargs):
         def decorator(f):
+            name = kwargs.get("name", f.__name__)
+
             @wraps(f)
             def decorated(*f_args, **f_kwargs):
                 return f(bot=self, *f_args, **f_kwargs)
