@@ -1,0 +1,21 @@
+{
+  "db": {
+    "active": "postgres"
+  },
+  "postgres": {
+    "_user": null,
+    "_db": null,
+    "_password": null,
+    "drivername": "postgres",
+    "adaptor": [
+      [
+        "username",
+        "user"
+      ],
+      [
+        "database",
+        "db"
+      ]
+    ]
+  }
+}
