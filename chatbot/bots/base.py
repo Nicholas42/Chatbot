@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Dict, Any, Callable
+from typing import Dict, Callable
 
 from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage

@@ -1,5 +1,7 @@
 from .config import Config
 from logging import getLogger, Logger
 
+from .global_object import Global
+
 module_logger: Logger = getLogger("chatbot")
-config: Config = Config()
+glob = Global()
