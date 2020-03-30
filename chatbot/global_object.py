@@ -31,13 +31,13 @@ class Global:
     @property
     def chat(self):
         if self._chat is None:
-            self._chat = Chat(self.bridge, self._config)
+            self._chat = Chat(self.bridge, self.config)
         return self._chat
 
     @property
     def botmaster(self):
         if self._botmaster is None:
-            self._botmaster = BotMaster(self.bridge, self._config)
+            self._botmaster = BotMaster(self.bridge, self.config)
         return self._botmaster
 
     def start_all(self):
