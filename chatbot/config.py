@@ -1,9 +1,8 @@
 import json
-from typing import Tuple
-
-import dotenv
 from os import environ
 from pathlib import Path
+
+import dotenv
 
 
 class Config(dict):

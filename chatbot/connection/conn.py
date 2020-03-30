@@ -1,7 +1,8 @@
-from websockets.client import Connect
-from websockets import Origin
 from requests import Session
-from chatbot import config, glob
+from websockets import Origin
+from websockets.client import Connect
+
+from chatbot import glob
 
 
 class PreparedConnection:
