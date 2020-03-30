@@ -3,7 +3,7 @@ import random
 
 import pyparsing
 
-from chatbot import config
+from chatbot import glob
 from chatbot.bots.base import BaseBot
 from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
 from chatbot.bots.utils.parsing.common import uword
@@ -19,8 +19,10 @@ def _lalala():
 class Luise(BaseBot):
     _time_out = 900  # seconds until luise renames herself back
 
-    def __init__(self):
+    def __init__(self, config=None):
         super().__init__()
+        if config is None:
+            config = glob.config
         self.config = config["botmaster"]["default_bots"]["luise"]
 
         self.parser: pyparsing.ParserElement = pyparsing.Empty()

@@ -4,7 +4,7 @@ from typing import Dict
 
 from websockets import ConnectionClosedError
 
-from chatbot import config
+from chatbot import glob
 from chatbot.interface.bridge import Bridge
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from . import module_logger
@@ -20,7 +20,7 @@ class Chat:
 
     def __init__(self, bridge: Bridge, _config=None):
         if _config is None:
-            _config = config
+            _config = glob.config
         self.channels = dict()
         self.listener_tasks = dict()
         self.bridge = bridge

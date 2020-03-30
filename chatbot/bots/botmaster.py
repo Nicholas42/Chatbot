@@ -1,7 +1,7 @@
 from asyncio import as_completed, create_task, CancelledError, wait
 from typing import Dict
 
-from chatbot import config
+from chatbot import glob
 from chatbot.bots import module_logger
 from chatbot.bots.base import BaseBot
 from chatbot.bots.loader import Loader
@@ -17,7 +17,7 @@ class BotMaster:
 
     def __init__(self, bridge: Bridge, _config=None):
         if _config is None:
-            _config = config
+            _config = glob.config
         self.loader = Loader()
         self.bots = dict()
         self.bridge = bridge
