@@ -12,7 +12,7 @@ class IDMixin:
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    id = Column(Integer, primary_key=True)
+    _column_id = Column(Integer, primary_key=True)
 
 
 def type_to_column(typ: Type):
