@@ -1,0 +1,20 @@
+version: "3"
+services:
+  chatbot:
+    container_name: Chatbot
+    build: .
+    depends_on:
+      - db
+    volumes:
+      - "${HOME}/.cache/pip/:/root/.cache/pip"
+    restart: on-failure:3
+    ports:
+      - 9003:5000
+
+  db:
+    container_name: Chatbot_DB
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - ${DATA_DIR:-${HOME}/.postgres/chatbot}:/var/lib/postgresql/data
