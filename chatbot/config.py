@@ -1,4 +1,6 @@
 import json
+from typing import Tuple
+
 import dotenv
 from os import environ
 from pathlib import Path
@@ -35,3 +37,12 @@ class Config(dict):
         if ret is None:
             raise KeyError(f"Hidden config parameter {env_name} is needed.")
         return ret
+
+
+def adapt_config(dic: dict, matches) -> dict:
+    """ If the .env names cannot match the needed names. """
+    ret = dic.copy()
+    for i in matches:
+        ret[i[1]] = ret.pop(i[0])
+
+    return ret
