@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from mako.runtime import _populate_self_namespace
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 
@@ -21,6 +21,10 @@ class AModel(Base):
     @hybrid_property
     def has_b(self):
         return self.bs.any()
+
+    @hybrid_method
+    def is_named(self, name):
+        return self.name == name
 
 
 class BModel(Base):
@@ -52,6 +56,8 @@ class TestModel(TestCase):
         self.session.flush()
 
         self.assertEqual(self.session.query(AModel).filter(AModel.has_b).all(), [])
+        self.assertEqual(self.session.query(AModel).filter(AModel.is_named("Luise")).one(), a)
+        self.assertEqual(self.session.query(AModel).filter(AModel.is_named("Luke")).count(), 0)
 
         b = BModel(name="Luke")
         self.session.add(b)
