@@ -1,4 +1,4 @@
-from asyncio import create_task, sleep, CancelledError
+from asyncio import create_task, sleep
 
 
 class AsyncScheduler:

@@ -1,10 +1,6 @@
-from aioconsole.console import interact
 from aioconsole.server import start_console_server
 
 from chatbot import glob, Config
-from chatbot.bots.botmaster import BotMaster
-from chatbot.connection.chat import Chat
-from chatbot.interface.bridge import Bridge
 
 
 class Runner:

@@ -1,12 +1,11 @@
-import json
 import logging
 from typing import Optional
 
 from websockets import WebSocketClientProtocol
 
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
-from .conn import PreparedConnection
 from . import module_logger
+from .conn import PreparedConnection
 
 logger: logging.Logger = module_logger.getChild("channel")
 
