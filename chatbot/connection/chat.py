@@ -1,5 +1,5 @@
 import logging
-from asyncio import create_task, CancelledError, Task, wait
+from asyncio import create_task, CancelledError, Task, wait, sleep
 from typing import Dict
 
 from websockets import ConnectionClosedError
@@ -49,7 +49,7 @@ class Chat:
         return await self.channels[channel].send_msg(message)
 
     def listen(self, channel):
-        logging.info(f"Registering channel {channel}.")
+        logger.info(f"Registering channel {channel}.")
         self.channels[channel] = Channel(channel, self.config)
 
         async def listen_to():
@@ -60,10 +60,13 @@ class Chat:
                         async for msg in conn:
                             self.handle_msg(IncomingMessage.from_json(msg))
                     except ConnectionClosedError as e:
-                        logging.info(
+                        logger.info(
                             f"Connection to channel {channel} closed with error.\n Code: {e.code}, Reason: {e.reason}")
+                    except ConnectionResetError:
+                        logger.info(f"Connection to channel {channel} reset by peer.")
                     await self.channels[channel].stop_listening()
-                    logging.debug(f"Connection to channel {channel} closed, reconnecting...")
+                    logger.debug(f"Connection to channel {channel} closed, reconnecting...")
+                    await sleep(2)  # Give some time before reconnecting
             except CancelledError:
                 if channel in self.channels and self.channels[channel]:
                     await self.channels[channel].stop_listening()
