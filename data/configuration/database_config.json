@@ -7,14 +7,16 @@
     "_db": null,
     "_password": null,
     "drivername": "postgres",
+    "port": 5432,
+    "host": "0.0.0.0",
     "adaptor": [
       [
-        "username",
-        "user"
+        "user",
+        "username"
       ],
       [
-        "database",
-        "db"
+        "db",
+        "database"
       ]
     ]
   }
