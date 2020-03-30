@@ -2,7 +2,9 @@ from unittest import TestCase
 
 from mako.runtime import _populate_self_namespace
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 from chatbot.database import Base
 from chatbot.database.db import DB
@@ -15,6 +17,10 @@ class AModel(Base):
     name = Column(String)
 
     bs = relationship("BModel", back_populates="A")
+
+    @hybrid_property
+    def has_b(self):
+        return self.bs.any()
 
 
 class BModel(Base):
@@ -39,6 +45,19 @@ class TestModel(TestCase):
 
     def tearDown(self) -> None:
         self.session.rollback()
+
+    def test_property(self):
+        a = AModel(name="Luise")
+        self.session.add(a)
+        self.session.flush()
+
+        self.assertEqual(self.session.query(AModel).filter(AModel.has_b).all(), [])
+
+        b = BModel(name="Luke")
+        self.session.add(b)
+        a.bs.append(b)
+
+        self.assertEqual(self.session.query(AModel).filter(AModel.has_b).one(), a)
 
     def test_creation(self):
         a = AModel(name="Luise")
