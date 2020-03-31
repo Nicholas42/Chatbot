@@ -12,10 +12,10 @@ class AsyncScheduler:
     def _set_timeout(self, new_timeout=None):
         if isinstance(new_timeout, datetime):
             new_timeout = new_timeout - datetime.now()
-        if isinstance(self.timeout, timedelta):
+        if isinstance(new_timeout, timedelta):
             new_timeout = new_timeout.seconds
 
-        if new_timeout < 0:
+        if new_timeout is not None and new_timeout < 0:
             new_timeout = None
 
         self.timeout = new_timeout
