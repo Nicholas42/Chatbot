@@ -14,6 +14,10 @@ class DBBot(BaseBot):
         return glob.db.session
 
     async def _react(self, incoming: IncomingMessage):
-        model = IncomingMessageModel.construct(incoming)
-        self.session.add(model)
-        self.session.commit()
+        with glob.db.context as session:
+            model = IncomingMessageModel.construct(incoming)
+            session.add(model)
+
+
+def create_bot(*args, **kwargs):
+    return DBBot()
