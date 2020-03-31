@@ -5,6 +5,9 @@ from chatbot.interface.messages import IncomingMessage
 
 
 class DBBot(BaseBot):
+    def __init__(self):
+        super().__init__()
+        self.react_on_bots = True
 
     @property
     def session(self):
