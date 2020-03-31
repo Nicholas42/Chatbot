@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum, auto
 
-from chatbot import config
+from chatbot import glob
 
 
 class MessageType(Enum):
@@ -12,11 +12,11 @@ class MessageType(Enum):
 
 
 def parse_date(text: str) -> datetime:
-    return datetime.strptime(text, config["message"]["dateformat"])
+    return datetime.strptime(text, glob.config["message"]["dateformat"])
 
 
 def format_date(date: datetime) -> str:
-    return date.strftime(config["message"]["dateformat"])
+    return date.strftime(glob.config["message"]["dateformat"])
 
 
 class Color:
