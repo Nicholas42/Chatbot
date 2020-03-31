@@ -16,7 +16,7 @@ class OutgoingMessageModel(IDMixin, Base):
 
     @hybrid_method
     def still_to_send(self, slack=timedelta(minutes=1)):
-        return self.send_time > (datetime.now() - slack)
+        return not self.sent and self.send_time > (datetime.now() - slack)
 
 
 @model_from_data_class(IncomingMessage)
