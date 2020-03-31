@@ -13,9 +13,11 @@ class Runner:
 
     async def wait_running(self):
         d = locals().copy()
+        glob.start_all()
         d["botmaster"] = glob.botmaster
         d["bridge"] = glob.bridge
         d["chat"] = glob.chat
+        d["db"] = glob.db
         d["exit"] = lambda: self.server.close()
 
         self.server = await start_console_server(host="0.0.0.0", port=5001, locals=d)
