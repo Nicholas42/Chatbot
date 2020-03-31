@@ -31,12 +31,21 @@ class IDMixin:
     _column_id = Column(Integer, primary_key=True)
 
 
-def type_to_column(typ: Type):
-    _LOOKUP = {str: String, int: Integer, bool: Boolean, datetime.datetime: DateTime}
+def unwrap_optional(typ):
+    for i in typ.__args__:
+        if not isinstance(None, i):
+            return i
+    raise ValueError(f"{typ} has only NoneTypes.")
+
+
+def type_to_column(typ):
+    _LOOKUP = {str: String, int: Integer, bool: Boolean, datetime.datetime: DateTime, Color: ColorColumn}
+    if hasattr(typ, "__origin__") and typ.__origin__ == Union:
+        typ = unwrap_optional(typ)
     if typ in _LOOKUP:
-        return _LOOKUP[typ]
+        return Column(_LOOKUP[typ])
     if issubclass(typ, enum.Enum):
-        return Enum(typ)
+        return Column(Enum(typ))
 
     raise TypeError(f"No Column fitting to {typ} found.")
 
