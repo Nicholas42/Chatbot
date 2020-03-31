@@ -3,7 +3,8 @@
     "default_bots": {
       "luise": {
         "_secret": null
-      }
+      },
+      "db_bot": {}
     }
   }
 }
