@@ -64,6 +64,9 @@ class Chat:
                             f"Connection to channel {channel} closed with error.\n Code: {e.code}, Reason: {e.reason}")
                     except ConnectionResetError:
                         logger.info(f"Connection to channel {channel} reset by peer.")
+                    except Exception as e:
+                        logger.exception(e)
+                        raise e
                     await self.channels[channel].stop_listening()
                     logger.debug(f"Connection to channel {channel} closed, reconnecting...")
                     await sleep(2)  # Give some time before reconnecting
