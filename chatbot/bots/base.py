@@ -14,18 +14,20 @@ class BaseBot:
         self.react_on_bots = False
 
     def create_msg(self, msg, incoming):
+        if msg is None:
+            return None
         if isinstance(msg, OutgoingMessage):
             return msg
         elif isinstance(msg, str):
             return OutgoingMessage(message=msg, name=self.name, channel=incoming.channel, delay=incoming.delay + 1)
         else:
-            d = dict(channel=incoming.channel, delay=incoming.delay + 1)
+            d = dict(channel=incoming.channel, delay=incoming.delay + 1, name=self.name)
             d.update(msg)
             return OutgoingMessage(**d)
 
     async def react(self, msg: IncomingMessage):
         if not msg.bottag or self.react_on_bots:
-            return await self._react(msg)
+            return self.create_msg(await self._react(msg), msg)
         return None
 
     async def shutdown(self):
