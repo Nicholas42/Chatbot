@@ -1,5 +1,5 @@
 from asyncio import create_task, sleep
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 class AsyncScheduler:
@@ -9,13 +9,20 @@ class AsyncScheduler:
         self.callback = callback
         self.task = None
 
-    def _set_timeout(self, new_timeout):
+    def _set_timeout(self, new_timeout=None):
+        if isinstance(new_timeout, datetime):
+            new_timeout = new_timeout - datetime.now()
         if isinstance(self.timeout, timedelta):
             new_timeout = new_timeout.seconds
+
+        if new_timeout < 0:
+            new_timeout = None
+
         self.timeout = new_timeout
 
     def run(self):
-        self.task = create_task(self.wait())
+        if self.timeout is not None:
+            self.task = create_task(self.wait())
 
     async def wait(self):
         await sleep(self.timeout)
@@ -24,9 +31,8 @@ class AsyncScheduler:
     def reset(self, new_timeout=None):
         if self.task is not None:
             self.cancel()
-        if new_timeout is not None:
-            self._set_timeout(new_timeout)
-            self.run()
+        self._set_timeout(new_timeout)
+        self.run()
 
     def cancel(self):
         self.task.cancel()
