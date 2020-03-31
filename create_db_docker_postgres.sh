@@ -8,4 +8,4 @@
 DATA_DIR=~/.postgres/chatbot
 
 mkdir -p "$DATA_DIR"
-docker run --name postgres_chatbot -v $DATA_DIR:/var/lib/postgresql/data -d --env-file .env postgres
+docker run --name postgres_chatbot -v $DATA_DIR:/var/lib/postgresql/data -p 5432:5432 -d --env-file .env postgres

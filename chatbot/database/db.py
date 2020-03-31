@@ -29,3 +29,22 @@ class DB:
     def _create_url(conf):
         _URL_ARGS = ["drivername", "username", "password", "host", "port", "database", "query"]
         return URL(**dict((i, conf.get(i)) for i in _URL_ARGS))
+
+    @property
+    def context(self):
+        return self.Context(self.session)
+
+    class Context:
+        def __init__(self, session: Session):
+            self.session: Session = session
+
+        def __enter__(self):
+            return self.session
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            if exc_type is None:
+                self.session.commit()
+            else:
+                self.session.rollback()
+
+            self.session.close()

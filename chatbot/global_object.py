@@ -4,6 +4,7 @@ class Global:
         self._bridge = None
         self._chat = None
         self._botmaster = None
+        self._db = None
 
     @property
     def config(self):
@@ -32,6 +33,13 @@ class Global:
         return self._chat
 
     @property
+    def db(self):
+        if self._db is None:
+            from chatbot.database.db import DB
+            self._db = DB(self.config)
+        return self._db
+
+    @property
     def botmaster(self):
         if self._botmaster is None:
             from chatbot.bots.botmaster import BotMaster
@@ -41,5 +49,6 @@ class Global:
     def start_all(self):
         """ Starts all parts in the correct order. """
         # Reading starts them
+        _ = self.db
         _ = self.chat
         _ = self.botmaster

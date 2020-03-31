@@ -24,3 +24,6 @@ class Color:
         self.r = int(hex_str[0:2], 16)
         self.g = int(hex_str[2:4], 16)
         self.b = int(hex_str[4:6], 16)
+
+    def to_hex(self):
+        return "".join(hex(i)[2:] for i in [self.r, self.g, self.b])
