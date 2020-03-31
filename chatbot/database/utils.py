@@ -1,7 +1,7 @@
 import datetime
 import enum
 from dataclasses import dataclass
-from typing import Type
+from typing import Type, Union
 
 import sqlalchemy.types as types
 from sqlalchemy import String, Integer, Boolean, DateTime, Enum, Column
@@ -54,7 +54,19 @@ def model_from_data_class(dataklass: dataclass):
     def decorated(klass: Type):
         for k, v in dataklass.__annotations__.items():
             if k not in klass.__dict__:
-                setattr(klass, k, v)
+                setattr(klass, k, type_to_column(v))
+
+        def construct(cls, dataobject: dataklass, *args, **kwargs) -> klass:
+            return cls(*args, **kwargs, **dataobject.__dict__)
+
+        klass.construct = classmethod(construct)
+
+        def convert(self) -> dataklass:
+            d = dict((key, getattr(self, key)) for key in dataklass.__annotations__)
+            return dataklass(**d)
+
+        klass.convert = convert
+
         return klass
 
     return decorated
