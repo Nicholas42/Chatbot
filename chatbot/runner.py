@@ -1,6 +1,7 @@
 from aioconsole.server import start_console_server
 
-from chatbot import glob, Config
+from chatbot import glob
+from chatbot.config import Config
 
 
 class Runner:
@@ -17,7 +18,7 @@ class Runner:
         d["chat"] = glob.chat
         d["exit"] = lambda: self.server.close()
 
-        self.server = await start_console_server(host="0.0.0.0", port=5000, locals=d)
+        self.server = await start_console_server(host="0.0.0.0", port=5001, locals=d)
         await self.server.wait_closed()
 
     async def shutdown(self):

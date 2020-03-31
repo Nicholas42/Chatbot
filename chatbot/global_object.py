@@ -1,8 +1,3 @@
-from chatbot.bots.botmaster import BotMaster
-from chatbot.connection.chat import Chat
-from chatbot.interface.bridge import Bridge
-
-
 class Global:
     def __init__(self):
         self._config = None
@@ -25,18 +20,21 @@ class Global:
     @property
     def bridge(self):
         if self._bridge is None:
+            from chatbot.interface.bridge import Bridge
             self._bridge = Bridge()
         return self._bridge
 
     @property
     def chat(self):
         if self._chat is None:
+            from chatbot.connection.chat import Chat
             self._chat = Chat(self.bridge, self.config)
         return self._chat
 
     @property
     def botmaster(self):
         if self._botmaster is None:
+            from chatbot.bots.botmaster import BotMaster
             self._botmaster = BotMaster(self.bridge, self.config)
         return self._botmaster
 
