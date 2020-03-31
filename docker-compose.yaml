@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   chatbot:
     container_name: Chatbot
@@ -7,7 +7,7 @@ services:
       - db
     volumes:
       - "${HOME}/.cache/pip/:/root/.cache/pip"
-    restart: on-failure:3
+    restart: on-failure
     ports:
       - 9003:5000
 
