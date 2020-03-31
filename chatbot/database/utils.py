@@ -3,8 +3,24 @@ import enum
 from dataclasses import dataclass
 from typing import Type
 
+import sqlalchemy.types as types
 from sqlalchemy import String, Integer, Boolean, DateTime, Enum, Column
 from sqlalchemy.ext.declarative import declared_attr
+
+from chatbot.interface.message_helpers import Color
+
+
+class ColorColumn(types.TypeDecorator):
+    impl = types.String
+
+    def process_bind_param(self, value: Color, dialect) -> str:
+        return value.to_hex()
+
+    def process_result_value(self, value: str, dialect) -> Color:
+        return Color(value)
+
+    def copy(self, **kw):
+        return ColorColumn(self.impl.length)
 
 
 class IDMixin:
