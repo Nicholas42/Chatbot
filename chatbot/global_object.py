@@ -1,3 +1,6 @@
+from chatbot.config import Config
+
+
 class Global:
     def __init__(self):
         self._config = None
@@ -5,6 +8,11 @@ class Global:
         self._chat = None
         self._botmaster = None
         self._db = None
+
+    def configure(self, value=None):
+        if self._config is None:
+            value = value or Config()
+            self.config = value
 
     @property
     def config(self):
