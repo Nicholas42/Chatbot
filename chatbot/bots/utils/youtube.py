@@ -1,6 +1,7 @@
 from requests import Session
 
 from chatbot import glob
+from chatbot.database.songs import Song
 
 
 class VideoNotFoundError(LookupError):
@@ -53,3 +54,21 @@ def lookup_video(vid, parts=("snippet", "contentDetail")):
         raise VideoNotFoundError(f"Video mit der ID {vid} existiert nicht.")
 
     return js["items"][0]
+
+
+def check_valid(vid):
+    try:
+        lookup_video(vid)
+    except (ConnectionRefusedError, VideoNotFoundError):
+        return False
+
+    return True
+
+
+def check_db():
+    ret = {}
+    with glob.db.context as session:
+        for i in session.query(Song.video_id).all():
+            ret[i] = check_valid(i)
+
+    return ret
