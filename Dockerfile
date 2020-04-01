@@ -1,6 +1,8 @@
 FROM python:3
 MAINTAINER Nicholas Schwab "chat@nicholas-schwab.de"
-EXPOSE 5000
+EXPOSE 5001
+
+RUN apt-get update && apt-get upgrade && apt-get install netcat rlwrap
 
 COPY . /bot
 WORKDIR /bot
