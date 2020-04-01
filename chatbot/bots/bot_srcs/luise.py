@@ -2,11 +2,15 @@ import hashlib
 import random
 
 import pyparsing
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from chatbot import glob
 from chatbot.bots.base import BaseBot
 from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
 from chatbot.bots.utils.parsing.common import uword
+from chatbot.bots.utils.parsing.youtube import parser as yt_parser
+from chatbot.bots.utils.youtube import get_video_info, VideoNotFoundError, check_restriction
+from chatbot.database.songs import Song
 from chatbot.interface.messages import IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
 
@@ -118,6 +122,51 @@ def featurerequest(args, **kwargs):
     """ Ich wünsch mir was! Und wenn ich gaaaaanz fest dran glaube wird es auch Wirklichkeit!"""
 
     return f"Ich will {args['_rest']}!"
+
+
+_sing_learn_arg = {"name_list": ["-a", "-l", "--add", "--learn"], "value_parser": yt_parser, "arg_name": "learn"}
+_sing_remove_arg = {"name_list": ["-r", "--remove"], "value_parser": yt_parser, "arg_name": "remove"}
+
+
+@luise.command(learn=_sing_learn_arg, remove=_sing_remove_arg)
+def sing(args, **kwargs):
+    if "learn" in args:
+        to_learn = args["learn"]
+
+        with glob.db.context as session:
+            song = session.query(Song).filter(Song.video_id == to_learn).one_or_none()
+            if song is not None:
+                return f"Ich kann {song.title} schon singen!"
+        try:
+            info = get_video_info(to_learn)
+        except (VideoNotFoundError, ConnectionRefusedError) as e:
+            return str(e)
+
+        if not check_restriction(info):
+            return f"Video mit der ID {to_learn} ist in Deutschland nicht ansehbar."
+        model = Song(video_id=to_learn, title=info["title"])
+
+        with glob.db.context as session:
+            session.add(model)
+
+        return f"Ich kann jetzt {info['title']} singen!"
+
+    elif "remove" in args:
+        to_remove = args["remove"]
+        with glob.db.context as session:
+            try:
+                song = session.query(Song).filter_by(Song.video_id == to_remove).one()
+            except NoResultFound:
+                return f"Ich kann das gar nicht singen!"
+            except MultipleResultsFound:
+                return f"Irgendwas ist sehr schief gegangen /o\\"
+            title = song.title
+            session.delete(song)
+        return f"Ich kann jetzt {title} nicht mehr singen!"
+    else:
+        with glob.db.context as session:
+            song: Song = random.sample(session.query(Song).all(), 1)[0]
+            return f"{sing.title}\n{song.url}"
 
 
 def create_bot(botmaster):
