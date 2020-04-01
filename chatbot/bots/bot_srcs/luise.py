@@ -5,7 +5,7 @@ import pyparsing
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from chatbot import glob
-from chatbot.bots.base import BaseBot
+from chatbot.bots.base import BaseBot, optional_argument
 from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
 from chatbot.bots.utils.parsing.common import uword
 from chatbot.bots.utils.parsing.youtube import parser as yt_parser
@@ -124,11 +124,9 @@ def featurerequest(args, **kwargs):
     return f"Ich will {args['_rest']}!"
 
 
-_sing_learn_arg = {"name_list": ["-a", "-l", "--add", "--learn"], "value_parser": yt_parser, "arg_name": "learn"}
-_sing_remove_arg = {"name_list": ["-r", "--remove"], "value_parser": yt_parser, "arg_name": "remove"}
-
-
-@luise.command(learn=_sing_learn_arg, remove=_sing_remove_arg)
+@luise.command()
+@optional_argument(name_list=["-a", "-l", "--add", "--learn"], value_parser=yt_parser, arg_name="learn")
+@optional_argument(name_list=["-r", "--remove"], value_parser=yt_parser, arg_name="remove")
 def sing(args, **kwargs):
     """ Ich singe was für dich! """
     if "learn" in args:
