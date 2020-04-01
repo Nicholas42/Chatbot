@@ -3,7 +3,8 @@
     "default_bots": {
       "reminder": {},
       "luise": {
-        "_secret": null
+        "_secret": null,
+        "_ytkey": null
       },
       "db_bot": {}
     }
