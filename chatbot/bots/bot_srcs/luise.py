@@ -166,7 +166,7 @@ def sing(args, **kwargs):
     else:
         with glob.db.context as session:
             song: Song = random.sample(session.query(Song).all(), 1)[0]
-            return f"{sing.title}\n{song.url}"
+            return f"{song.title}\n{song.url}"
 
 
 def create_bot(botmaster):
