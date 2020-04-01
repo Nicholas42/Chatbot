@@ -48,10 +48,36 @@ class BaseBot:
                 else:
                     parser.add_positional_argument(**i)
 
+            for i in getattr(f, "__args__", []):
+                parser.add_positional_argument(*i[0], **i[1])
+
             for k, v in kwargs.items():
                 parser.add_optional_argument(**v)
+
+            for i in getattr(f, "__opt_args__", []):
+                parser.add_optional_argument(*i[0], **i[1])
 
             self.commands[decorated] = parser
             return decorated
 
         return decorator
+
+
+def positional_argument(*args, **kwargs):
+    def decorator(f):
+        if not hasattr(f, "__args__"):
+            setattr(f, "__args__", [])
+        f.__args__.append((args, kwargs))
+        return f
+
+    return decorator
+
+
+def optional_argument(*args, **kwargs):
+    def decorator(f):
+        if not hasattr(f, "__opt_args__"):
+            setattr(f, "__opt_args__", [])
+        f.__opt_args__.append((args, kwargs))
+        return f
+
+    return decorator
