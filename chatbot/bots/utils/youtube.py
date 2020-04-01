@@ -1,7 +1,6 @@
 from requests import Session
 
 from chatbot import glob
-from chatbot.database.songs import Song
 
 
 class VideoNotFoundError(LookupError):
@@ -27,18 +26,20 @@ def get_video_info(vid, searched=None):
     for k, v in searched.items():
         val = info
         for i in v:
-            val = val[i]
+            val = val.get(i, dict())
 
         ret[k] = val
 
     return ret
 
 
-def lookup_video(vid, parts=("snippet", "contentDetail")):
+def lookup_video(vid, parts=("snippet", "contentDetails")):
     _BASE_URL = "https://www.googleapis.com/youtube/v3/videos?"
     _KEY = glob.config['botmaster']['default_bots']['luise']['ytkey']
     url = f"{_BASE_URL}id={vid}&part={','.join(parts)}&key={_KEY}"
-    res = Session().get(url)
+    ses = Session()
+    res = ses.get(url)
+    ses.close()
     if not res.ok:
         msg = None
         try:
@@ -66,6 +67,7 @@ def check_valid(vid):
 
 
 def check_db():
+    from chatbot.database.songs import Song
     ret = {}
     with glob.db.context as session:
         for i in session.query(Song.video_id).all():
