@@ -64,13 +64,3 @@ def check_valid(vid):
         return False
 
     return True
-
-
-def check_db():
-    from chatbot.database.songs import Song
-    ret = {}
-    with glob.db.context as session:
-        for i in session.query(Song.video_id).all():
-            ret[i] = check_valid(i)
-
-    return ret
