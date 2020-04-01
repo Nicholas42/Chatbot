@@ -11,7 +11,7 @@ services:
       - "${HOME}/.cache/pip/:/root/.cache/pip"
     restart: on-failure
     ports:
-      - 9003:5000
+      - 9003:5001
 
   db:
     container_name: Chatbot_DB
