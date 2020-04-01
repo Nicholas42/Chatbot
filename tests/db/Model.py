@@ -1,11 +1,11 @@
 from unittest import TestCase
 
-from mako.runtime import _populate_self_namespace
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm.attributes import InstrumentedAttribute
 
+from chatbot import glob
 from chatbot.database import Base
 from chatbot.database.db import DB
 
@@ -14,7 +14,7 @@ class AModel(Base):
     __tablename__ = "_testA"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
 
     bs = relationship("BModel", back_populates="A")
 
@@ -38,10 +38,11 @@ class BModel(Base):
 
 
 class TestModel(TestCase):
+    glob.configure()
+    db = DB()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.db = DB()
         self.db.create_all()
 
     def setUp(self) -> None:
@@ -49,6 +50,18 @@ class TestModel(TestCase):
 
     def tearDown(self) -> None:
         self.session.rollback()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        Base.metadata.drop_all(bind=cls.db.engine, tables=[AModel.__table__, BModel.__table__])
+
+    def test_unique(self):
+        a = AModel(name="Luise")
+        self.session.add(a)
+
+        b = AModel(name="Luise")
+
+        self.assertRaises(IntegrityError, lambda: (self.session.add(b), self.session.flush()))
 
     def test_property(self):
         a = AModel(name="Luise")
