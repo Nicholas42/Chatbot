@@ -3,9 +3,9 @@ import pyparsing as pp
 scheme = pp.Literal("http") + pp.Optional('s') + "://"
 url = pp.Optional("www.") + "youtube." + ... + (pp.Literal("/v/") ^ "&v=" ^ "?v=" ^ "/embed/")
 short = pp.Literal("youtu.be/")
-vid = pp.SkipTo(pp.LineEnd() ^ pp.Char("#?&"))("vid")
+vid = pp.SkipTo(pp.LineEnd() ^ pp.Char("#?&") ^ pp.White())("vid")
 
-parser = pp.Optional(scheme) + (url ^ short) + vid
+parser = pp.Suppress(pp.Optional(scheme) + (url ^ short)) + vid
 
 
 def get_vid(s):
