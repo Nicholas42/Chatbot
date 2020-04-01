@@ -7,7 +7,7 @@ from .. import glob
 
 
 class Song(IDMixin, Base):
-    video_id = Column(String)
+    video_id = Column(String, unique=True)
     title = Column(String)
 
     @hybrid_property

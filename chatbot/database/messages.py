@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import Column, DateTime, Boolean
+from sqlalchemy import Column, DateTime, Boolean, Integer
 from sqlalchemy.ext.hybrid import hybrid_method
 
 from chatbot import glob
@@ -22,7 +22,7 @@ class OutgoingMessageModel(IDMixin, Base):
 
 @model_from_data_class(IncomingMessage)
 class IncomingMessageModel(IDMixin, Base):
-    pass
+    id = Column(Integer, unique=True)
 
 
 glob.db.create_all()
