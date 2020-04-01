@@ -2,7 +2,7 @@ FROM python:3
 MAINTAINER Nicholas Schwab "chat@nicholas-schwab.de"
 EXPOSE 5001
 
-RUN apt-get update && apt-get upgrade && apt-get install netcat rlwrap
+RUN apt-get update -y && apt-get upgrade -y && apt-get install netcat rlwrap -y
 
 COPY . /bot
 WORKDIR /bot
