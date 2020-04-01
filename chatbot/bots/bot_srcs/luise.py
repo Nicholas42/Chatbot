@@ -130,6 +130,7 @@ _sing_remove_arg = {"name_list": ["-r", "--remove"], "value_parser": yt_parser, 
 
 @luise.command(learn=_sing_learn_arg, remove=_sing_remove_arg)
 def sing(args, **kwargs):
+    """ Ich singe was für dich! """
     if "learn" in args:
         to_learn = args["learn"]
 
