@@ -55,7 +55,12 @@ class Chat:
         async def listen_to():
             try:
                 while True:
-                    conn = await self.channels[channel].start_listening()
+                    try:
+                        conn = await self.channels[channel].start_listening()
+                    except ConnectionResetError as e:
+                        logger.exception(e)
+                        await sleep(2)
+                        continue
                     try:
                         async for msg in conn:
                             self.handle_msg(IncomingMessage.from_json(msg))
