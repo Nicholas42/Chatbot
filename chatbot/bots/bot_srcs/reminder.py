@@ -81,9 +81,6 @@ class ReminderBot(BaseBot):
         if date is None:
             return f"Ich konnte das Datum nicht lesen :-("
 
-        if date < datetime.now():
-            return f"Das Datum {date.isoformat()} liegt in der Vergangenheit!"
-
         outgoing = f"!ping '{target}' Du wolltest an folgendes erinnert werden:\n{args['msg']}"
         self.scheduler.schedule(self.create_msg({"message": outgoing, "bottag": 0}, msg), date)
 
