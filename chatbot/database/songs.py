@@ -16,9 +16,6 @@ class Song(IDMixin, Base):
         return f"https://www.youtube.com/watch?v={self.video_id}"
 
 
-glob.db.create_all()
-
-
 def check_song_validity():
     ret = {}
     with glob.db.context as session:

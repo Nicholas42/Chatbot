@@ -43,7 +43,7 @@ class TestModel(TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.db.create_all()
+        Base.metadata.create_all(self.db.engine)
 
     def setUp(self) -> None:
         self.session = self.db.session

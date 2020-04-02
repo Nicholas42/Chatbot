@@ -1,11 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
-from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker, Session
 
 from chatbot import glob
 from chatbot.config import adapt_config
-from chatbot.database import Base
 
 
 class DB:
@@ -21,9 +19,6 @@ class DB:
     @property
     def session(self) -> Session:
         return self._session_class()
-
-    def create_all(self, base: DeclarativeMeta = Base):
-        base.metadata.create_all(self.engine)
 
     @staticmethod
     def _create_url(conf):
