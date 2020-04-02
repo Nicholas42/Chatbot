@@ -11,7 +11,7 @@ class AsyncScheduler:
 
     def _set_timeout(self, new_timeout=None):
         if isinstance(new_timeout, datetime):
-            new_timeout = new_timeout.astimezone(None) - datetime.now()
+            new_timeout = new_timeout.astimezone(None).replace(tzinfo=None) - datetime.now()
         if isinstance(new_timeout, timedelta):
             new_timeout = new_timeout.seconds
 
