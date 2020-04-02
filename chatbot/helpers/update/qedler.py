@@ -20,7 +20,7 @@ def parse_html(soup):
 
 def add_to_db(values):
     with glob.db.context as session:
-        existing = set(session.query(QEDler.user_id).all())
+        existing = set(i[0] for i in session.query(QEDler.user_id).all())
         new = set(values).difference(existing)
         session.bulk_insert_mappings(QEDler, [values[i] for i in new])
 

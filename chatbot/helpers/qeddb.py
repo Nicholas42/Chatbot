@@ -20,4 +20,4 @@ def login():
 
 def lookup_persons(session, sid):
     res = session.get(f"{URL}personen.php", params={"session_id2": sid})
-    return BeautifulSoup(res.text)
+    return BeautifulSoup(res.text, parser="html.parser")
