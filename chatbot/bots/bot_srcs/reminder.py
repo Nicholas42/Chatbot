@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 
 from dateutil.parser import ParserError
 from pyparsing import ParserElement, ParseException
@@ -45,7 +45,7 @@ class ReminderSender:
                 OutgoingMessageModel.still_to_send()).limit(1).scalar()
 
     def _send(self):
-        limit = datetime.now() + self.slack
+        limit = datetime.now(timezone.utc) + self.slack
         with glob.db.context as session:
             to_send = session.query(OutgoingMessageModel).filter(OutgoingMessageModel.still_to_send()).filter(
                 OutgoingMessageModel.send_time < limit).all()
