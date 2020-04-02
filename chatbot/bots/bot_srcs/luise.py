@@ -23,7 +23,7 @@ def _lalala():
 class Luise(BaseBot):
     _time_out = 900  # seconds until luise renames herself back
 
-    def __init__(self, config=None):
+    def __init__(self, botmaster, config=None):
         super().__init__()
         if config is None:
             config = glob.config
@@ -60,10 +60,7 @@ class Luise(BaseBot):
         return call_parse_result(result, msg)
 
 
-luise = Luise()
-
-
-@luise.command()
+@Luise.command()
 def help(bot: Luise, **kwargs):
     """ Ich sag dir, wie du mit mir umgehen sollst! """
 
@@ -71,7 +68,7 @@ def help(bot: Luise, **kwargs):
     return help_msg + "\n".join(f"{v.command_word}:\n\t {k.__doc__}" for k, v in bot.commands.items())
 
 
-@luise.command({"name": "new_name", "value_parser": uword})
+@Luise.command({"name": "new_name", "value_parser": uword})
 def be(bot, args, msg, **kwargs):
     """ Ich verwandel mich in jemand anderen! """
     bot.name = args["new_name"]
@@ -80,35 +77,35 @@ def be(bot, args, msg, **kwargs):
     return _lalala()
 
 
-@luise.command()
+@Luise.command()
 def ping(**kwargs):
     """ Pong! """
 
     return "pong"
 
 
-@luise.command()
+@Luise.command()
 def slap(args, **kwargs):
     """ Ich schlage jemanden! -.- """
 
     return f"*schlägt {args['_rest']}*"
 
 
-@luise.command()
+@Luise.command()
 def hug(args, **kwargs):
     """ Ich knuddel jemanden! :-) """
 
     return f"*knuddelt {args['_rest']}*"
 
 
-@luise.command()
+@Luise.command()
 def say(args, **kwargs):
     """ Ich sage etwas! """
 
     return args["_rest"]
 
 
-@luise.command()
+@Luise.command()
 def decide(bot, args, **kwargs):
     """ Ich helfe dir, dich zu entscheiden! """
     salt = bot.config["secret"].encode()
@@ -117,14 +114,14 @@ def decide(bot, args, **kwargs):
     return '+' if int(res[0]) % 2 == 0 else '-'
 
 
-@luise.command()
+@Luise.command()
 def featurerequest(args, **kwargs):
     """ Ich wünsch mir was! Und wenn ich gaaaaanz fest dran glaube wird es auch Wirklichkeit!"""
 
     return f"Ich will {args['_rest']}!"
 
 
-@luise.command()
+@Luise.command()
 @optional_argument(name_list=["-a", "-l", "--add", "--learn"], value_parser=yt_parser, arg_name="learn")
 @optional_argument(name_list=["-r", "--remove"], value_parser=yt_parser, arg_name="remove")
 def sing(args, **kwargs):
@@ -169,6 +166,6 @@ def sing(args, **kwargs):
 
 
 def create_bot(botmaster):
-    luise.botmaster = botmaster
+    luise = Luise(botmaster)
     luise.reload_parsers()
     return luise

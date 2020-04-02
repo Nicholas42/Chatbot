@@ -6,10 +6,9 @@ from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 
 
 class BaseBot:
-    commands: Dict[Callable, Parser]
+    commands: Dict[Callable, Parser] = dict()
 
     def __init__(self):
-        self.commands = dict()
         self.name = self.__class__.__name__
         self.react_on_bots = False
 
@@ -33,13 +32,14 @@ class BaseBot:
     async def shutdown(self):
         pass
 
-    def command(self, *args, **kwargs):
+    @classmethod
+    def command(cls, *args, **kwargs):
         def decorator(f):
             name = kwargs.get("name", f.__name__)
 
             @wraps(f)
             def decorated(msg, *f_args, **f_kwargs):
-                return self.create_msg(f(*f_args, msg=msg, bot=self, **f_kwargs), msg)
+                return f(*f_args, msg=msg, bot=cls, **f_kwargs)
 
             parser = Parser(name, func=decorated)
             for i in args:
@@ -57,7 +57,7 @@ class BaseBot:
             for i in getattr(f, "__opt_args__", []):
                 parser.add_optional_argument(*i[0], **i[1])
 
-            self.commands[decorated] = parser
+            cls.commands[decorated] = parser
             return decorated
 
         return decorator
