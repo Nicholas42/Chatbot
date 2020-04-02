@@ -2,7 +2,7 @@ version: "2.1"
 services:
   chatbot:
     container_name: Chatbot
-    build: .
+    image: chatbot
     links:
       - db:db
     depends_on:
