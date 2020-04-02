@@ -15,3 +15,7 @@ def qedler(**kwargs):
     result = run()
     return f"{result['new_count'] - result['old_count']} neue QEDler eingetragen. " \
            f"Es sind jetzt insgesamt {result['new_count']}!"
+
+
+def create_bot(*args, **kwargs):
+    return UpdateBot()
