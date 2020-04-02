@@ -7,7 +7,8 @@ URL = "https://qeddb.qed-verein.de/"
 
 
 def login():
-    data = {"anmelden": "anmelden", "username": glob.config["username"], "password": glob.config["password"]}
+    data = {"anmelden": "anmelden", "username": glob.config["qeddb"]["username"],
+            "password": glob.config["qeddb"]["password"]}
     session = Session()
     res = session.post(f"{URL}index.php", data=data)
     sid = res.url.partition("=")[2]
