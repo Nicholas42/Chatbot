@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, String
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from chatbot.database import Base
@@ -14,6 +15,11 @@ class Nickname(IDMixin, Base):
 
 class QEDler(IDMixin, Base):
     user_id = Column(Integer, unique=True)
-    user_name = Column(String, unique=True)
+    forename = Column(String)
+    surname = Column(String)
 
     nicknames = relationship("Nickname", back_populates="qedler")
+
+    @hybrid_property
+    def user_name(self):
+        return self.forename + self.surname
