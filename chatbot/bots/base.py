@@ -3,6 +3,7 @@ from typing import Dict, Callable
 
 import pyparsing
 import pyparsing as pp
+from pyparsing import ParseBaseException
 
 from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
@@ -50,7 +51,10 @@ class CommandBot(BaseBot):
         self.subparser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
 
     async def _react(self, msg: IncomingMessage):
-        result = (self.parser + self.subparser).parseString(msg.message)
+        try:
+            result = (self.parser + self.subparser).parseString(msg.message)
+        except ParseBaseException:
+            return None
 
         return self.call_parse_result(result, msg)
 

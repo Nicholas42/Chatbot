@@ -1,7 +1,6 @@
 import hashlib
 import random
 
-import pyparsing
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from chatbot import glob
@@ -42,12 +41,10 @@ class Luise(CommandBot):
             self.timer.reset(self._time_out)
 
     async def _react(self, msg: IncomingMessage):
-        try:
-            result = await super()._react(msg)
-        except pyparsing.ParseBaseException as e:
-            return None
+        result = await super()._react(msg)
 
-        self.reset_rename(msg)
+        if result is not None:
+            self.reset_rename(msg)
 
         return result
 

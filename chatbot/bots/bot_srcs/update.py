@@ -8,7 +8,7 @@ class UpdateBot(CommandBot):
         self.name = "update"
 
 
-@UpdateBot.command("qedler")
+@UpdateBot.command()
 def qedler(**kwargs):
     """ Updatet die interne QEDler Datenbank, wichtig für Nicknames """
 
