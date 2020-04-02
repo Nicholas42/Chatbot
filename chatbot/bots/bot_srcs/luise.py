@@ -5,8 +5,7 @@ import pyparsing
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from chatbot import glob
-from chatbot.bots.base import BaseBot, optional_argument
-from chatbot.bots.utils.parsing.command_parser import Parser
+from chatbot.bots.base import optional_argument, CommandBot
 from chatbot.bots.utils.parsing.common import uword
 from chatbot.bots.utils.parsing.youtube import parser as yt_parser
 from chatbot.bots.utils.youtube import get_video_info, VideoNotFoundError, check_restriction
@@ -20,7 +19,7 @@ def _lalala():
     return "la" + "a".join(random.choices(["l", "ll"], weights=[5, 1], k=length)) + "a"
 
 
-class Luise(BaseBot):
+class Luise(CommandBot):
     _time_out = 900  # seconds until luise renames herself back
 
     def __init__(self, botmaster, config=None):
@@ -29,7 +28,6 @@ class Luise(BaseBot):
             config = glob.config
         self.config = config["botmaster"]["default_bots"]["luise"]
 
-        self.parser: pyparsing.ParserElement = pyparsing.Empty()
         self.botmaster = None
         self.rename_msg = None
         self.timer = AsyncScheduler(self._time_out, self._rename)
@@ -43,15 +41,12 @@ class Luise(BaseBot):
             self.rename_msg = message
             self.timer.reset(self._time_out)
 
-    def reload_parsers(self):
-        self.parser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
-
     def get_keyword(self):
         return pyparsing.CaselessKeyword(f"!{self.name}")
 
     async def _react(self, msg: IncomingMessage):
         try:
-            result = (self.get_keyword() + self.parser).parseString(msg.message)
+            result = (self.get_keyword() + self.subparser).parseString(msg.message)
         except pyparsing.ParseBaseException as e:
             return None
 
@@ -166,6 +161,4 @@ def sing(args, **kwargs):
 
 
 def create_bot(botmaster):
-    luise = Luise(botmaster)
-    luise.reload_parsers()
-    return luise
+    return Luise(botmaster)

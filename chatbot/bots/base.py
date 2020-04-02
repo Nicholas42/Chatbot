@@ -1,6 +1,7 @@
 from functools import wraps
 from typing import Dict, Callable
 
+import pyparsing
 import pyparsing as pp
 
 from chatbot.bots.utils.parsing.command_parser import Parser
@@ -37,6 +38,16 @@ class BaseBot:
 
     async def shutdown(self):
         pass
+
+
+class CommandBot(BaseBot):
+    def __init__(self):
+        super().__init__()
+        self.subparser: pyparsing.ParserElement = pyparsing.Empty()
+        self.reload_parsers()
+
+    def reload_parsers(self):
+        self.subparser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
 
     @classmethod
     def command(cls, *args, **kwargs):
