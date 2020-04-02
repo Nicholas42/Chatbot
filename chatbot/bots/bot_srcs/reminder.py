@@ -13,6 +13,10 @@ from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
 
 
+def _format_date(date: datetime):
+    return date.strftime("%d.%m.%Y %H:%M:%S")
+
+
 class ReminderSender:
     def __init__(self, slack=timedelta(minutes=2)):
         self.slack = slack
@@ -70,7 +74,7 @@ class ReminderBot(BaseBot):
         self.parser: ParserElement = _parser.as_pp_parser()
 
     def work(self, msg: IncomingMessage, args):
-        target = args.get("target", msg.name)
+        target = args.get("target", msg.name.strip())
         try:
             date = parse_date(args["date"])
         except ParserError:
@@ -84,7 +88,7 @@ class ReminderBot(BaseBot):
         outgoing = f"!ping '{target}' Du wolltest an folgendes erinnert werden:\n{args['msg']}"
         self.scheduler.schedule(self.create_msg({"message": outgoing, "bottag": 0}, msg), date)
 
-        return f"Eine Nachricht wurde für {target} zum Zeitpunkt {date.isoformat()} eingeplant."
+        return f"Eine Nachricht wurde für {target} zum Zeitpunkt {_format_date(date)} eingeplant."
 
     async def _react(self, incoming):
         try:
