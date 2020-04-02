@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, types
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import Column, Integer, ForeignKey, String, types, func
+from sqlalchemy.ext.hybrid import hybrid_property, Comparator
 from sqlalchemy.orm import relationship
 
 from chatbot import glob
@@ -9,6 +9,14 @@ from chatbot.database.utils import IDMixin
 
 def normalize_nickname(nickname: str):
     return nickname.strip().lower()
+
+
+class CaseInsensitiveComparator(Comparator):
+    def reverse_operate(self, op, other, **kwargs):
+        return op(func.lower(other), func.lower(self.__clause_element__()))
+
+    def operate(self, op, *other, **kwargs):
+        return op(func.lower(self.__clause_element__()), func.lower(other))
 
 
 class NicknameColumn(types.TypeDecorator):
@@ -41,3 +49,20 @@ class QEDler(IDMixin, Base):
     @hybrid_property
     def user_name(self):
         return self.forename + self.surname
+
+    @hybrid_property
+    def user_name_insensitive(self):
+        return (self.forename + self.surname).lower()
+
+    @user_name_insensitive.comparator
+    def user_name_insensitive(cls):
+        return CaseInsensitiveComparator(cls.forename + cls.surname)
+
+
+def get_user(nickname: str):
+    nickname = normalize_nickname(nickname)
+    print(nickname)
+    user = glob.db.lookup_session.query(QEDler).filter(QEDler.user_name_insensitive == nickname).one_or_none()
+    if user:
+        return user
+    return glob.db.lookup_session.query(Nickname).filter(Nickname.nickname == nickname).one_or_none()
