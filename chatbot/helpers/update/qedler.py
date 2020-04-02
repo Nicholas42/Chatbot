@@ -11,8 +11,8 @@ def parse_html(soup):
 
         user_id = int(plink.split('person=')[1].split('&')[0])
         d["user_id"] = user_id
-        d["forename"] = str(row.find('td', class_="personennachname").find('div').string).strip()
-        d["surename"] = str(row.find('td', class_="personenvorname").find('div').string).strip()
+        d["surname"] = str(row.find('td', class_="personennachname").find('div').string).strip()
+        d["forename"] = str(row.find('td', class_="personenvorname").find('div').string).strip()
         ret[user_id] = d
 
     return ret
