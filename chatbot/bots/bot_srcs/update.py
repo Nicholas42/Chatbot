@@ -1,3 +1,4 @@
+from chatbot import glob
 from chatbot.bots.base import CommandBot
 from chatbot.helpers.update.qedler import run
 
@@ -6,6 +7,11 @@ class UpdateBot(CommandBot):
     def __init__(self):
         super().__init__()
         self.name = "update"
+
+    async def _react(self, msg):
+        if msg.username == glob.config["qeddb"]["username"]:
+            return await super()._react(msg)
+        return None
 
 
 @UpdateBot.command()
