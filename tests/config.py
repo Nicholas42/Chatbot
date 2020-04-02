@@ -1,7 +1,8 @@
-from chatbot.config import Config
-from unittest import TestCase
-from pathlib import Path
 from os import environ
+from pathlib import Path
+from unittest import TestCase
+
+from chatbot.config import Config
 
 
 class TestConfig(TestCase):
@@ -18,3 +19,4 @@ class TestConfig(TestCase):
         self.assertEqual(self.config["user"]["username"], "Testy")
         self.assertEqual(self.config["user"]["password"], "Safe")
         self.assertEqual(self.config["user"]["stuff"], {"secret": "VERY SECRET", "not secret": None})
+        self.assertEqual(self.config["test"], "BLUB")
