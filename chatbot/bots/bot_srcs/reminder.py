@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime, timezone
 
+import pytz
 from dateutil.parser import ParserError
 from pyparsing import ParserElement, ParseException
 
@@ -14,7 +15,7 @@ from chatbot.utils.async_sched import AsyncScheduler
 
 
 def _format_date(date: datetime):
-    return date.strftime("%d.%m.%Y %H:%M:%S")
+    return date.astimezone(pytz.timezone("Europe/Berlin")).strftime("%d.%m.%Y %H:%M:%S")
 
 
 class ReminderSender:
