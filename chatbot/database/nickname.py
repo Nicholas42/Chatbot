@@ -7,7 +7,7 @@ from chatbot.database.utils import IDMixin
 
 
 class Nickname(IDMixin, Base):
-    nickname = Column(String)
+    nickname = Column(String, unique=True)
     user_id = Column(Integer, ForeignKey("qedler.user_id"))
 
     qedler = relationship("QEDler", back_populates="nicknames")
