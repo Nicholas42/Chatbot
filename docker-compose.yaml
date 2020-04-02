@@ -7,11 +7,19 @@ services:
       - db:db
     depends_on:
       - db
-    volumes:
-      - "${HOME}/.cache/pip/:/root/.cache/pip"
     restart: on-failure
     ports:
       - 9003:5001
+
+  alembic:
+    container_name: Chatbot_Alembic
+    image: chatbot
+    entrypoint: ["alembic", "upgrade", "head"]
+    restart: no
+    depends_on:
+      - db
+    links:
+      - db:db
 
   db:
     container_name: Chatbot_DB
