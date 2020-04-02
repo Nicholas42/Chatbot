@@ -49,6 +49,15 @@ class CommandBot(BaseBot):
     def reload_parsers(self):
         self.subparser: pyparsing.ParserElement = pyparsing.Or(map(Parser.as_pp_parser, self.commands.values()))
 
+    async def _react(self, msg: IncomingMessage):
+        result = (self.parser + self.subparser).parseString(msg.message)
+
+        return self.call_parse_result(result, msg)
+
+    @property
+    def parser(self):
+        return pyparsing.CaselessKeyword(f"!{self.name}")
+
     @classmethod
     def command(cls, *args, **kwargs):
         def decorator(f):

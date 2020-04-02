@@ -41,18 +41,15 @@ class Luise(CommandBot):
             self.rename_msg = message
             self.timer.reset(self._time_out)
 
-    def get_keyword(self):
-        return pyparsing.CaselessKeyword(f"!{self.name}")
-
     async def _react(self, msg: IncomingMessage):
         try:
-            result = (self.get_keyword() + self.subparser).parseString(msg.message)
+            result = await super()._react(msg)
         except pyparsing.ParseBaseException as e:
             return None
 
         self.reset_rename(msg)
 
-        return self.call_parse_result(result, msg)
+        return result
 
 
 @Luise.command()
