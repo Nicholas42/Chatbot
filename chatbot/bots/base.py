@@ -1,3 +1,4 @@
+from abc import abstractmethod, ABCMeta
 from functools import wraps
 from typing import Dict, Callable
 
@@ -9,7 +10,7 @@ from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 
 
-class BaseBot:
+class BaseBot(metaclass=ABCMeta):
     commands: Dict[Callable, Parser] = dict()
 
     def __init__(self):
@@ -38,6 +39,10 @@ class BaseBot:
         return None
 
     async def shutdown(self):
+        pass
+
+    @abstractmethod
+    async def _react(self, msg):
         pass
 
 
