@@ -6,7 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from chatbot import glob
 from chatbot.bots.base import BaseBot, optional_argument
-from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
+from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.bots.utils.parsing.common import uword
 from chatbot.bots.utils.parsing.youtube import parser as yt_parser
 from chatbot.bots.utils.youtube import get_video_info, VideoNotFoundError, check_restriction
@@ -57,7 +57,7 @@ class Luise(BaseBot):
 
         self.reset_rename(msg)
 
-        return call_parse_result(result, msg)
+        return self.call_parse_result(result, msg)
 
 
 @Luise.command()

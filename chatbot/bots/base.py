@@ -1,6 +1,8 @@
 from functools import wraps
 from typing import Dict, Callable
 
+import pyparsing as pp
+
 from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 
@@ -11,6 +13,10 @@ class BaseBot:
     def __init__(self):
         self.name = self.__class__.__name__
         self.react_on_bots = False
+
+    def call_parse_result(self, res: pp.ParseResults, msg, *args, **kwargs):
+        d = res.asDict()
+        return d["command"](msg, *args, bot=self, args=d["options"], **kwargs)
 
     def create_msg(self, msg, incoming):
         if msg is None:
@@ -39,7 +45,7 @@ class BaseBot:
 
             @wraps(f)
             def decorated(msg, *f_args, **f_kwargs):
-                return f(*f_args, msg=msg, bot=cls, **f_kwargs)
+                return f(*f_args, msg=msg, **f_kwargs)
 
             parser = Parser(name, func=decorated)
             for i in args:

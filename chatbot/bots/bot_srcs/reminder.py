@@ -6,7 +6,7 @@ from pyparsing import ParserElement, ParseException
 
 from chatbot import glob
 from chatbot.bots.base import BaseBot
-from chatbot.bots.utils.parsing.command_parser import Parser, call_parse_result
+from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.bots.utils.parsing.common import rest_of_string
 from chatbot.bots.utils.parsing.date import parse_date
 from chatbot.database.messages import OutgoingMessageModel
@@ -94,7 +94,7 @@ class ReminderBot(BaseBot):
     async def _react(self, incoming):
         try:
             result = self.parser.parseString(incoming.message)
-            return call_parse_result(result, incoming)
+            return self.call_parse_result(result, incoming)
         except ParseException:
             return None
 
