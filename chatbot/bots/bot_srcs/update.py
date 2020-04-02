@@ -1,5 +1,5 @@
-from ..base import CommandBot
-from ...helpers.update.qedler import run
+from chatbot.bots.base import CommandBot
+from chatbot.helpers.update.qedler import run
 
 
 class UpdateBot(CommandBot):
