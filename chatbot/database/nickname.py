@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, types, func
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property, Comparator
 from sqlalchemy.orm import relationship
 
@@ -34,9 +35,13 @@ class NicknameColumn(types.TypeDecorator):
 
 class Nickname(IDMixin, Base):
     nickname = Column(NicknameColumn, unique=True)
+    original = Column(String, unique=True)  # The nickname before normalization.
     user_id = Column(Integer, ForeignKey("qedler.user_id"))
 
-    qedler = relationship("QEDler", back_populates="nicknames")
+    qedler = relationship("QEDler", back_populates="nickname_objects")
+
+    def __str__(self):
+        return self.original
 
 
 class QEDler(IDMixin, Base):
@@ -44,7 +49,9 @@ class QEDler(IDMixin, Base):
     forename = Column(String)
     surname = Column(String)
 
-    nicknames = relationship("Nickname", back_populates="qedler")
+    nickname_objects = relationship("Nickname", back_populates="qedler")
+
+    nicknames = association_proxy("_nicknames", "nickname", creator=lambda nick: Nickname(nickname=nick))
 
     @hybrid_property
     def user_name(self):
