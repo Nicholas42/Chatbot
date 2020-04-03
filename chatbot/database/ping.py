@@ -25,7 +25,11 @@ class Ping(IDMixin, Base):
 
     @hybrid_property
     def is_active(self):
-        return self.activation_time > datetime.datetime.now(datetime.timezone.utc)
+        return self.activation_time <= datetime.datetime.now(datetime.timezone.utc)
+
+    @is_active.expression
+    def is_active(self):
+        return self.activation_time <= utcnow()
 
 
 # Does NOT destroy the pings!
