@@ -8,8 +8,8 @@ from ..bots.utils.youtube import check_valid
 
 
 class Song(IDMixin, Base):
-    video_id = Column(String, unique=True)
-    title = Column(String)
+    video_id = Column(String, unique=True, nullable=False)
+    title = Column(String, nullable=False)
 
     @hybrid_property
     def url(self):

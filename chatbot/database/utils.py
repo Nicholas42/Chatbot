@@ -4,8 +4,10 @@ from dataclasses import dataclass
 from typing import Type, Union
 
 from sqlalchemy import String, Integer, Boolean, DateTime, Enum, Column, func, types
+from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import Comparator
+from sqlalchemy.sql import expression
 
 from chatbot.interface.message_helpers import Color
 
@@ -95,3 +97,17 @@ class NicknameColumn(types.TypeDecorator):
 
     def copy(self, **kw):
         return NicknameColumn(self.impl.length)
+
+
+class utcnow(expression.FunctionElement):
+    type = DateTime()
+
+
+@compiles(utcnow, 'postgresql')
+def pg_utcnow(element, compiler, **kw):
+    return "TIMEZONE('utc', CURRENT_TIMESTAMP)"
+
+
+@compiles(utcnow, 'mssql')
+def ms_utcnow(element, compiler, **kw):
+    return "GETUTCDATE()"

@@ -9,8 +9,8 @@ from chatbot.database.utils import IDMixin, normalize_nickname, CaseInsensitiveC
 
 
 class Nickname(IDMixin, Base):
-    nickname = Column(NicknameColumn, unique=True)
-    original = Column(String, unique=True)  # The nickname before normalization.
+    nickname = Column(NicknameColumn, unique=True, nullable=False)
+    original = Column(String, unique=True, nullable=False)  # The nickname before normalization.
     user_id = Column(Integer, ForeignKey("qedler.user_id"))
 
     qedler = relationship("QEDler", back_populates="nickname_objects")
@@ -27,8 +27,8 @@ def create_nickname(nickname, original=None):
 
 class QEDler(IDMixin, Base):
     user_id = Column(Integer, unique=True)
-    forename = Column(String)
-    surname = Column(String)
+    forename = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
 
     nickname_objects = relationship("Nickname", back_populates="qedler")
 

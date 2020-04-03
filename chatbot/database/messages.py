@@ -5,13 +5,13 @@ from sqlalchemy.ext.hybrid import hybrid_method
 
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 from . import Base
-from .utils import IDMixin, model_from_data_class
+from .utils import IDMixin, model_from_data_class, utcnow
 
 
 @model_from_data_class(OutgoingMessage)
 class OutgoingMessageModel(IDMixin, Base):
-    sent = Column(Boolean)
-    send_time = Column(TIMESTAMP(timezone=True))
+    sent = Column(Boolean, nullable=False, server_default="false")
+    send_time = Column(TIMESTAMP(timezone=True), nullable=False, server_default=utcnow())
 
     @hybrid_method
     def still_to_send(self, slack=timedelta(minutes=1)):
@@ -21,4 +21,4 @@ class OutgoingMessageModel(IDMixin, Base):
 
 @model_from_data_class(IncomingMessage)
 class IncomingMessageModel(IDMixin, Base):
-    id = Column(Integer, unique=True)
+    id = Column(Integer, unique=True, nullable=False)
