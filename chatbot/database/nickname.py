@@ -44,6 +44,12 @@ class Nickname(IDMixin, Base):
         return self.original
 
 
+def create_nickname(nickname, original=None):
+    if original is None:
+        original = nickname
+    return Nickname(nickname=nickname, original=original)
+
+
 class QEDler(IDMixin, Base):
     user_id = Column(Integer, unique=True)
     forename = Column(String)
@@ -51,7 +57,7 @@ class QEDler(IDMixin, Base):
 
     nickname_objects = relationship("Nickname", back_populates="qedler")
 
-    nicknames = association_proxy("nickname_objects", "nickname", creator=lambda nick: Nickname(nickname=nick))
+    nicknames = association_proxy("nickname_objects", "nickname", creator=create_nickname)
 
     @hybrid_property
     def user_name(self):
