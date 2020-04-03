@@ -14,7 +14,7 @@ class Nickname(IDMixin, Base):
     user_id = Column(Integer, ForeignKey("qedler.user_id"))
 
     qedler = relationship("QEDler", back_populates="nickname_objects")
-    pings = relationship("Ping")
+    pings = relationship("Ping", back_populates="target")
 
     def __str__(self):
         return self.original
@@ -32,7 +32,7 @@ class QEDler(IDMixin, Base):
     surname = Column(String, nullable=False)
 
     nickname_objects = relationship("Nickname", back_populates="qedler")
-    pings = relationship("Ping")
+    pings = relationship("Ping", back_populates="user")
 
     nicknames = association_proxy("nickname_objects", "nickname", creator=create_nickname)
 
