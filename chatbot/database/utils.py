@@ -1,6 +1,7 @@
 import datetime
 import enum
 from dataclasses import dataclass
+from functools import wraps
 from typing import Type, Union
 
 from sqlalchemy import String, Integer, Boolean, DateTime, Enum, Column, func, types
@@ -9,7 +10,20 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.sql import expression
 
+from chatbot import glob
 from chatbot.interface.message_helpers import Color
+
+
+def inject_session(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "session" not in kwargs:
+            with glob.session.context as session:
+                return f(*args, session=session, **kwargs)
+        else:
+            return f(*args, **kwargs)
+
+    return decorated
 
 
 class ColorColumn(types.TypeDecorator):

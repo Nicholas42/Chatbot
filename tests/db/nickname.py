@@ -16,5 +16,5 @@ class TestNickname(TestCase):
         self.session.rollback()
 
     def test_get_user(self):
-        nicholas = get_user("        nIchoLasSchwAB")
+        nicholas = get_user(self.session, "        nIchoLasSchwAB")
         self.assertEqual(nicholas.user_id, 412)

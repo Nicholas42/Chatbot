@@ -3,7 +3,6 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
-from chatbot import glob
 from chatbot.database import Base
 from chatbot.database.utils import IDMixin, normalize_nickname, CaseInsensitiveComparator, NicknameColumn
 
@@ -49,9 +48,9 @@ class QEDler(IDMixin, Base):
         return CaseInsensitiveComparator(cls.forename + cls.surname)
 
 
-def get_user(nickname: str):
+def get_user(session, nickname: str):
     nickname = normalize_nickname(nickname)
-    user = glob.db.session.query(QEDler).filter(QEDler.user_name_insensitive == nickname).one_or_none()
+    user = session.query(QEDler).filter(QEDler.user_name_insensitive == nickname).one_or_none()
     if user:
         return user
-    return glob.db.session.query(Nickname).filter(Nickname.nickname == nickname).one_or_none()
+    return session.query(Nickname).filter(Nickname.nickname == nickname).one_or_none()
