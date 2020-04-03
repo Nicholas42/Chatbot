@@ -68,8 +68,7 @@ class QEDler(IDMixin, Base):
 
 def get_user(nickname: str):
     nickname = normalize_nickname(nickname)
-    print(nickname)
-    user = glob.db.lookup_session.query(QEDler).filter(QEDler.user_name_insensitive == nickname).one_or_none()
+    user = glob.db.session.query(QEDler).filter(QEDler.user_name_insensitive == nickname).one_or_none()
     if user:
         return user
-    return glob.db.lookup_session.query(Nickname).filter(Nickname.nickname == nickname).one_or_none()
+    return glob.db.session.query(Nickname).filter(Nickname.nickname == nickname).one_or_none()

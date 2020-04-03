@@ -15,7 +15,6 @@ class DB:
 
         self.engine = create_engine(self._create_url(conf))
         self._session_class = sessionmaker(bind=self.engine)
-        self.lookup_session = self.session
 
     @property
     def session(self) -> Session:
