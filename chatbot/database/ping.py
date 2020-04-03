@@ -20,8 +20,8 @@ class Ping(IDMixin, Base):
     sender = Column(String, nullable=False)
     activation_time = Column(TIMESTAMP(timezone=True), server_default=utcnow(), nullable=False)
 
-    user = relationship("QEDler", back_populate="pings")
-    target = relationship("Nickname", back_populate="pings")
+    user = relationship("QEDler", back_populates="pings")
+    target = relationship("Nickname", back_populates="pings")
 
     @hybrid_property
     def is_active(self):
