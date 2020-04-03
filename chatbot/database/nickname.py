@@ -23,11 +23,11 @@ class CaseInsensitiveComparator(Comparator):
 class NicknameColumn(types.TypeDecorator):
     impl = types.String
 
-    def process_bind_param(self, db_entry: str, dialect) -> str:
-        return db_entry
-
-    def process_result_value(self, nickname: str, dialect) -> str:
+    def process_bind_param(self, nickname: str, dialect) -> str:
         return normalize_nickname(nickname)
+
+    def process_result_value(self, db_entry: str, dialect) -> str:
+        return db_entry
 
     def copy(self, **kw):
         return NicknameColumn(self.impl.length)
@@ -51,7 +51,7 @@ class QEDler(IDMixin, Base):
 
     nickname_objects = relationship("Nickname", back_populates="qedler")
 
-    nicknames = association_proxy("_nicknames", "nickname", creator=lambda nick: Nickname(nickname=nick))
+    nicknames = association_proxy("nickname_objects", "nickname", creator=lambda nick: Nickname(nickname=nick))
 
     @hybrid_property
     def user_name(self):
