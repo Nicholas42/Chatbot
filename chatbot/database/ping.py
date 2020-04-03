@@ -11,7 +11,7 @@ MIN_DATE = datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
 
 class Ping(IDMixin, Base):
     user_id = Column(Integer, ForeignKey("qedler.user_id"))
-    target = Column(Integer, ForeignKey("nickname._column_id"))
+    target_id = Column(Integer, ForeignKey("nickname._column_id"))
     message = Column(Text, nullable=False)
     ping_time = Column(TIMESTAMP(timezone=True), nullable=False, server_default=utcnow())
     sender = Column(String, nullable=False)
