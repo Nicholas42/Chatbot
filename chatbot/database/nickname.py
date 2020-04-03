@@ -1,36 +1,11 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, types, func
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.ext.hybrid import hybrid_property, Comparator
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from chatbot import glob
 from chatbot.database import Base
-from chatbot.database.utils import IDMixin
-
-
-def normalize_nickname(nickname: str):
-    return nickname.strip().lower()
-
-
-class CaseInsensitiveComparator(Comparator):
-    def reverse_operate(self, op, other, **kwargs):
-        return op(func.lower(other), func.lower(self.__clause_element__()))
-
-    def operate(self, op, *other, **kwargs):
-        return op(func.lower(self.__clause_element__()), func.lower(other))
-
-
-class NicknameColumn(types.TypeDecorator):
-    impl = types.String
-
-    def process_bind_param(self, nickname: str, dialect) -> str:
-        return normalize_nickname(nickname)
-
-    def process_result_value(self, db_entry: str, dialect) -> str:
-        return db_entry
-
-    def copy(self, **kw):
-        return NicknameColumn(self.impl.length)
+from chatbot.database.utils import IDMixin, normalize_nickname, CaseInsensitiveComparator, NicknameColumn
 
 
 class Nickname(IDMixin, Base):

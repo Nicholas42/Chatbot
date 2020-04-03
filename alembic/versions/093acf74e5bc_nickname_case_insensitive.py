@@ -8,7 +8,7 @@ Create Date: 2020-04-02 22:45:11.007193
 import sqlalchemy as sa
 from alembic import op
 
-from chatbot.database.nickname import NicknameColumn
+from chatbot.database.utils import NicknameColumn
 
 # revision identifiers, used by Alembic.
 revision = '093acf74e5bc'

@@ -3,7 +3,8 @@ from pyparsing import ParseBaseException
 from chatbot import glob
 from chatbot.bots.base import BaseBot
 from chatbot.bots.utils.parsing.command_parser import Parser
-from chatbot.database.nickname import normalize_nickname, get_user, QEDler, Nickname as NicknameModel
+from chatbot.database.nickname import get_user, QEDler, Nickname as NicknameModel
+from chatbot.database.utils import normalize_nickname
 
 
 def _add_nick(existing: QEDler, to_add):

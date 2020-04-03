@@ -3,9 +3,9 @@ import enum
 from dataclasses import dataclass
 from typing import Type, Union
 
-import sqlalchemy.types as types
-from sqlalchemy import String, Integer, Boolean, DateTime, Enum, Column
+from sqlalchemy import String, Integer, Boolean, DateTime, Enum, Column, func, types
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.ext.hybrid import Comparator
 
 from chatbot.interface.message_helpers import Color
 
@@ -70,3 +70,28 @@ def model_from_data_class(dataklass: dataclass):
         return klass
 
     return decorated
+
+
+def normalize_nickname(nickname: str):
+    return nickname.strip().lower()
+
+
+class CaseInsensitiveComparator(Comparator):
+    def reverse_operate(self, op, other, **kwargs):
+        return op(func.lower(other), func.lower(self.__clause_element__()))
+
+    def operate(self, op, *other, **kwargs):
+        return op(func.lower(self.__clause_element__()), func.lower(other))
+
+
+class NicknameColumn(types.TypeDecorator):
+    impl = types.String
+
+    def process_bind_param(self, nickname: str, dialect) -> str:
+        return normalize_nickname(nickname)
+
+    def process_result_value(self, db_entry: str, dialect) -> str:
+        return db_entry
+
+    def copy(self, **kw):
+        return NicknameColumn(self.impl.length)
