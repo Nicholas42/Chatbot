@@ -28,6 +28,21 @@ class Ping(IDMixin, Base):
         return self.activation_time > datetime.datetime.now(datetime.timezone.utc)
 
 
+# Does NOT destroy the pings!
+def get_ping(targetname, user_id=None, session=None):
+    ret = []
+    if session is None:
+        session = glob.db.session
+
+    if user_id is not None:
+        ret.extend(session.query(QEDler.pings).filter(QEDler.user_id == user_id).filter(Ping.is_active).all())
+
+    target = get_user(targetname)
+    if target and not (user_id is not None and target.user_id == user_id):
+        ret.extend(target.pings.filter(Ping.is_active))
+    return ret
+
+
 def create_ping(targetname, **kwargs):
     target = get_user(targetname)
     with glob.db.context as session:
