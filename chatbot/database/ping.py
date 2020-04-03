@@ -26,3 +26,20 @@ class Ping(IDMixin, Base):
     @hybrid_property
     def is_active(self):
         return self.activation_time > datetime.datetime.now(datetime.timezone.utc)
+
+
+def create_ping(targetname, **kwargs):
+    target = get_user(targetname)
+    with glob.db.context as session:
+        target = session.merge(target)
+        p = Ping(**kwargs)
+        if isinstance(target, QEDler):
+            p.user = target
+        else:
+            if target is None:
+                target = create_nickname(targetname)
+                session.add(target)
+            p.target = target
+            p.user_id = target.user_id
+        session.add(p)
+    return p
