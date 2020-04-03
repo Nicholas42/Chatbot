@@ -19,7 +19,6 @@ class TestCommon(TestCase):
         dict_list = [{"a": 1}, {"a": 2, "b": 3}, {"b": 4, "c": 0}]
 
         self.assertEqual(common.update_dict(dict_list), {"a": 2, "b": 4, "c": 0})
-        self.assertEqual(common.update_dict(dict_list, int.__add__), {"a": 3, "b": 7, "c": 0})
 
     def test_int_parser(self):
         tests = ["0", "00000", "-121", "-0"]

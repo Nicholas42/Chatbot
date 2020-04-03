@@ -1,6 +1,6 @@
 from requests import Session
 from websockets import Origin
-from websockets.client import Connect
+from websockets.client import connect
 
 from chatbot import glob
 
@@ -22,7 +22,7 @@ class PreparedConnection:
         self.cookie = self._obtain_cookie()
 
     def connect(self):
-        return Connect(self.ws_url, extra_headers={"Cookie": self.cookie}, origin=Origin(self.http_url))
+        return connect(self.ws_url, extra_headers={"Cookie": self.cookie}, origin=Origin(self.http_url))
 
     def _obtain_cookie(self):
         ses = Session()

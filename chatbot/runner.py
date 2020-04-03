@@ -23,6 +23,7 @@ class Runner:
         self.server = await start_console_server(host="0.0.0.0", port=5001, locals=d)
         await self.server.wait_closed()
 
-    async def shutdown(self):
+    @staticmethod
+    async def shutdown():
         await glob.chat.shutdown()
         await glob.botmaster.shutdown()

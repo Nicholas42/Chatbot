@@ -9,7 +9,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-from chatbot.database.utils import utcnow
+from chatbot.database.utils import UTCNow
 
 revision = '145b9d5f7c35'
 down_revision = '90443bd32493'
@@ -31,7 +31,7 @@ def upgrade():
     op.alter_column('outgoingmessagemodel', 'send_time',
                     existing_type=sa.VARCHAR(),
                     nullable=False,
-                    server_default=utcnow())
+                    server_default=UTCNow())
     op.alter_column('outgoingmessagemodel', 'sent',
                     existing_type=sa.BOOLEAN(),
                     nullable=False,

@@ -113,15 +113,15 @@ class NicknameColumn(types.TypeDecorator):
         return NicknameColumn(self.impl.length)
 
 
-class utcnow(expression.FunctionElement):
+class UTCNow(expression.FunctionElement):
     type = DateTime()
 
 
-@compiles(utcnow, 'postgresql')
+@compiles(UTCNow, 'postgresql')
 def pg_utcnow(element, compiler, **kw):
     return "TIMEZONE('utc', CURRENT_TIMESTAMP)"
 
 
-@compiles(utcnow, 'mssql')
+@compiles(UTCNow, 'mssql')
 def ms_utcnow(element, compiler, **kw):
     return "GETUTCDATE()"
