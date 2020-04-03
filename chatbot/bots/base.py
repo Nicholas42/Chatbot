@@ -28,10 +28,12 @@ class BaseBot(metaclass=ABCMeta):
             return msg
         elif isinstance(msg, str):
             return OutgoingMessage(message=msg, name=self.name, channel=incoming.channel, delay=incoming.delay + 1)
-        else:
+        elif isinstance(msg, dict):
             d = dict(channel=incoming.channel, delay=incoming.delay + 1, name=self.name)
             d.update(msg)
             return OutgoingMessage(**d)
+        else:
+            return [self.create_msg(i, incoming) for i in msg]
 
     async def react(self, msg: IncomingMessage):
         if not msg.bottag or self.react_on_bots:

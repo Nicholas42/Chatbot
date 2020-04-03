@@ -6,6 +6,7 @@ from chatbot.bots import module_logger
 from chatbot.bots.base import BaseBot
 from chatbot.bots.loader import Loader
 from chatbot.interface.bridge import Bridge
+from chatbot.interface.messages import OutgoingMessage
 
 logger = module_logger.getChild("botmaster")
 
@@ -38,7 +39,11 @@ class BotMaster:
         for i in as_completed([i.react(msg) for i in self.bots.values()]):
             ret = await i
             if ret:
-                self.bridge.put_outgoing_nowait(ret)
+                if isinstance(ret, OutgoingMessage):
+                    self.bridge.put_outgoing_nowait(ret)
+                else:
+                    for out in ret:
+                        self.bridge.put_outgoing_nowait(out)
 
     async def stop_bot(self, bot_name):
         bot = self.bots.pop(bot_name)
