@@ -26,7 +26,7 @@ class TestPing(TestCase):
         self.session.rollback()
 
     def test_user(self):
-        p = Ping(user_id=412, message="Blub", sender="Your Mom")
+        p = Ping(user_id=412, message="Blub", sender="Your Mom", post_id=5)
         self.session.add(p)
         nicholas = self.session.query(QEDler).filter(QEDler.user_id == 412).one()
 

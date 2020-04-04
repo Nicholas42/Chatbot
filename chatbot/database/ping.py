@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP, String, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
-from . import Base
+from .db import Base
 from .nickname import get_user, QEDler, create_nickname
 from .utils import IDMixin, UTCNow
 

@@ -4,7 +4,7 @@ from sqlalchemy import Column, Boolean, Integer, TIMESTAMP
 from sqlalchemy.ext.hybrid import hybrid_method
 
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
-from . import Base
+from .db import Base
 from .utils import IDMixin, model_from_data_class, UTCNow
 
 

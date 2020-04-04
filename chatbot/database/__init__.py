@@ -1,5 +1,3 @@
-from sqlalchemy.ext.declarative import declarative_base
+from . import messages, songs, nickname, ping  # Needed, so all Tables get declared.
 
-__all__ = ["messages", "songs", "Base", "nickname", "ping"]
-
-Base = declarative_base()
+__all__ = ["messages", "songs", "nickname", "ping"]

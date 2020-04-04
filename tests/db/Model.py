@@ -2,11 +2,13 @@ from unittest import TestCase
 
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm import relationship
 
-from chatbot.database import Base
 from chatbot.database.db import DB
+
+Base = declarative_base()
 
 
 class AModel(Base):
