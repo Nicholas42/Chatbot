@@ -1,6 +1,7 @@
 from aioconsole.server import start_console_server
 
 from .bots.botmaster import BotMaster
+from .config import config
 from .connection.chat import Chat
 from .database.db import database
 from .interface.bridge import Bridge
@@ -9,7 +10,7 @@ from .interface.bridge import Bridge
 class Runner:
     def __init__(self, _config=None):
         if _config is not None:
-            config = _config
+            config.load(_config.path, config.env_file)
 
         self.server = None
         self.bridge = Bridge()
