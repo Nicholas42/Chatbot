@@ -10,8 +10,11 @@ class Config(dict):
                  env_file: Path = Path(__file__).parent / ".." / ".env"):
         super().__init__()
         self.path = path
-        dotenv.load_dotenv(str(env_file.absolute()))
-        for i in path.glob("*.json"):
+        self.env_file = env_file
+
+    def load(self):
+        dotenv.load_dotenv(str(self.env_file.absolute()))
+        for i in self.path.glob("*.json"):
             with open(str(i.absolute())) as f:
                 d: dict = json.load(f)
                 if not isinstance(d, dict):
