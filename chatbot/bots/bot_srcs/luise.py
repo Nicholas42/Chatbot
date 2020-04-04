@@ -3,11 +3,12 @@ import random
 
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
-from chatbot import glob
 from chatbot.bots.base import optional_argument, CommandBot
 from chatbot.bots.utils.parsing.common import uword
 from chatbot.bots.utils.parsing.youtube import parser as yt_parser
 from chatbot.bots.utils.youtube import get_video_info, VideoNotFoundError, check_restriction
+from chatbot.config import config
+from chatbot.database.db import database
 from chatbot.database.songs import Song
 from chatbot.interface.messages import IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
@@ -21,11 +22,11 @@ def _lalala():
 class Luise(CommandBot):
     _time_out = 900  # seconds until luise renames herself back
 
-    def __init__(self, botmaster, config=None):
+    def __init__(self, botmaster, _config=None):
         super().__init__()
-        if config is None:
-            config = glob.config
-        self.config = config["botmaster"]["default_bots"]["luise"]
+        if _config is None:
+            _config = config
+        self.config = _config["botmaster"]["default_bots"]["luise"]
 
         self.botmaster = None
         self.rename_msg = None
@@ -118,7 +119,7 @@ def sing(args, **kwargs):
     if "learn" in args:
         to_learn = args["learn"]
 
-        with glob.db.context as session:
+        with database.context as session:
             song = session.query(Song).filter(Song.video_id == to_learn).one_or_none()
             if song is not None:
                 return f"Ich kann {song.title} schon singen!"
@@ -131,14 +132,14 @@ def sing(args, **kwargs):
             return f"Video mit der ID {to_learn} ist in Deutschland nicht ansehbar."
         model = Song(video_id=to_learn, title=info["title"])
 
-        with glob.db.context as session:
+        with database.context as session:
             session.add(model)
 
         return f"Ich kann jetzt {info['title']} singen!"
 
     elif "remove" in args:
         to_remove = args["remove"]
-        with glob.db.context as session:
+        with database.context as session:
             try:
                 song = session.query(Song).filter_by(Song.video_id == to_remove).one()
             except NoResultFound:
@@ -149,7 +150,7 @@ def sing(args, **kwargs):
             session.delete(song)
         return f"Ich kann jetzt {title} nicht mehr singen!"
     else:
-        with glob.db.context as session:
+        with database.context as session:
             song: Song = random.sample(session.query(Song).all(), 1)[0]
             return f"{song.title}\n{song.url}"
 

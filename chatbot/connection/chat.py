@@ -4,8 +4,7 @@ from typing import Dict
 
 from websockets import ConnectionClosedError
 
-from chatbot import glob
-from chatbot.interface.bridge import Bridge
+from chatbot.config import config
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from . import module_logger
 from .channel import Channel
@@ -16,11 +15,10 @@ logger: logging.Logger = module_logger.getChild("chat")
 class Chat:
     channels: Dict[str, Channel]
     listener_tasks: Dict[str, Task]
-    bridge: Bridge
 
-    def __init__(self, bridge: Bridge, _config=None):
+    def __init__(self, bridge, _config=None):
         if _config is None:
-            _config = glob.config
+            _config = config
         self.channels = dict()
         self.listener_tasks = dict()
         self.bridge = bridge

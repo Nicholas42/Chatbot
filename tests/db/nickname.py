@@ -1,12 +1,10 @@
 from unittest import TestCase
 
-from chatbot import glob
 from chatbot.database.db import DB
 from chatbot.database.nickname import get_user
 
 
 class TestNickname(TestCase):
-    glob.configure()
     db = DB()
 
     def setUp(self) -> None:

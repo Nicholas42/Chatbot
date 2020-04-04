@@ -4,7 +4,6 @@ from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP, String, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
-from chatbot import glob
 from chatbot.database import Base
 from chatbot.database.nickname import get_user, QEDler, create_nickname
 from chatbot.database.utils import IDMixin, UTCNow
@@ -37,8 +36,6 @@ class Ping(IDMixin, Base):
 # Does NOT destroy the pings!
 def get_pings(session, targetname, user_id=None):
     ret = []
-    if session is None:
-        session = glob.db.session
 
     target = get_user(session, targetname)
     user_id = user_id if user_id is not None or target is None else target.user_id

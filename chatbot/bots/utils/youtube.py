@@ -1,6 +1,6 @@
 from requests import Session
 
-from chatbot import glob
+from chatbot.config import config
 
 
 class VideoNotFoundError(LookupError):
@@ -35,7 +35,7 @@ def get_video_info(vid, searched=None):
 
 def lookup_video(vid, parts=("snippet", "contentDetails")):
     _BASE_URL = "https://www.googleapis.com/youtube/v3/videos?"
-    _KEY = glob.config['botmaster']['default_bots']['luise']['ytkey']
+    _KEY = config['botmaster']['default_bots']['luise']['ytkey']
     url = f"{_BASE_URL}id={vid}&part={','.join(parts)}&key={_KEY}"
     ses = Session()
     res = ses.get(url)

@@ -1,8 +1,5 @@
 from unittest import TestCase
 
-from chatbot import glob
-
-glob.configure()
 from chatbot.bots.utils.youtube import get_video_info
 
 

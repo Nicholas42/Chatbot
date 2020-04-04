@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from chatbot import glob
 from chatbot.bots.bot_srcs.nickname import Nickname
+from chatbot.database.db import database
 from chatbot.database.nickname import QEDler
 
 
@@ -9,6 +9,14 @@ class TestNickname(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.nickname = Nickname()
+        self.session = None
+
+    def setUp(self) -> None:
+        self.session = database.session
+
+    def tearDown(self) -> None:
+        self.session.rollback()
+        self.session.close()
 
     def test_parser(self):
         tests = [("!nickname nicholas", {"name": "nicholas"}),
@@ -21,9 +29,7 @@ class TestNickname(TestCase):
             self.assertEqual(self.nickname.parser.parseString(i[0])["options"], i[1])
 
     def test_db(self):
-        glob.configure()
-
-        nicholas: QEDler = glob.db.session.query(QEDler).filter(QEDler.user_id == 412).one()
+        nicholas: QEDler = self.session.query(QEDler).filter(QEDler.user_id == 412).one()
 
         show = self.nickname.work(None, {"name": "epsilon"})
         self.assertEqual(len(show.split('\n')), len(nicholas.nicknames) + 1)

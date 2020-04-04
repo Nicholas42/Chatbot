@@ -2,13 +2,13 @@ from requests import Session
 from websockets import Origin
 from websockets.client import connect
 
-from chatbot import glob
+from chatbot.config import config
 
 
 class PreparedConnection:
     def __init__(self, channel="test", position=0, _config=None, url_opts=None):
         if _config is None:
-            _config = glob.config
+            _config = config
         if url_opts is None:
             url_opts = dict()
         url_opts.update({"channel": channel, "position": position})

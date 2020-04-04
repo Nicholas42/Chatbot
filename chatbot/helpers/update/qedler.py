@@ -1,4 +1,4 @@
-from chatbot import glob
+from chatbot.database.db import database
 from chatbot.database.nickname import QEDler
 from chatbot.helpers.qeddb import login, lookup_persons
 
@@ -19,7 +19,7 @@ def parse_html(soup):
 
 
 def add_to_db(values):
-    with glob.db.context as session:
+    with database.context as session:
         existing = set(i[0] for i in session.query(QEDler.user_id).all())
         new = set(values).difference(existing)
         session.bulk_insert_mappings(QEDler, [values[i] for i in new])
@@ -33,12 +33,11 @@ def updatepersons():
 
 
 def count_qedler():
-    with glob.db.context as session:
+    with database.context as session:
         return session.query(QEDler).count()
 
 
 def run():
-    glob.configure()
     old_count = count_qedler()
     updatepersons()
     new_count = count_qedler()

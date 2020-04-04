@@ -5,7 +5,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy.orm import relationship
 
-from chatbot import glob
 from chatbot.database import Base
 from chatbot.database.db import DB
 
@@ -38,7 +37,6 @@ class BModel(Base):
 
 
 class TestModel(TestCase):
-    glob.configure()
     db = DB()
 
     def __init__(self, *args, **kwargs):

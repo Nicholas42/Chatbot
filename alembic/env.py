@@ -2,13 +2,11 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from chatbot import glob
-
-glob.configure()
 from chatbot.database import *
-
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
+from chatbot.database.db import database
+
 config = context.config
 
 # Interpret the config file for Python logging.
@@ -42,7 +40,7 @@ def run_migrations_offline():
 
     """
     context.configure(
-        url=glob.db.engine.url,
+        url=database.engine.url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

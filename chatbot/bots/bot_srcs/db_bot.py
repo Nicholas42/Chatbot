@@ -1,5 +1,5 @@
-from chatbot import glob
 from chatbot.bots.base import BaseBot
+from chatbot.database.db import database
 from chatbot.database.messages import IncomingMessageModel
 from chatbot.interface.messages import IncomingMessage
 
@@ -9,12 +9,8 @@ class DBBot(BaseBot):
         super().__init__()
         self.react_on_bots = True
 
-    @property
-    def session(self):
-        return glob.db.session
-
     async def _react(self, incoming: IncomingMessage):
-        with glob.db.context as session:
+        with database.context as session:
             model = IncomingMessageModel.construct(incoming)
             session.add(model)
 

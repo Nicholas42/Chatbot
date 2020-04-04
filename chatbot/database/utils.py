@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.sql import expression
 
-from chatbot import glob
+from chatbot.database.db import database
 from chatbot.interface.message_helpers import Color
 
 
@@ -18,7 +18,7 @@ def inject_session(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "session" not in kwargs:
-            with glob.session.context as session:
+            with database.context as session:
                 return f(*args, session=session, **kwargs)
         else:
             return f(*args, **kwargs)

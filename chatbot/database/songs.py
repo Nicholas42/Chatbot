@@ -2,8 +2,8 @@ from sqlalchemy import Column, String
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import Base
+from .db import database
 from .utils import IDMixin
-from .. import glob
 from ..bots.utils.youtube import check_valid
 
 
@@ -18,7 +18,7 @@ class Song(IDMixin, Base):
 
 def check_song_validity():
     ret = {}
-    with glob.db.context as session:
+    with database.context as session:
         for i in session.query(Song.video_id).all():
             ret[i] = check_valid(i)
 

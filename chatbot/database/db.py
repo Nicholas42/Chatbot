@@ -2,14 +2,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker, Session
 
-from chatbot import glob
-from chatbot.config import adapt_config
+from chatbot.config import adapt_config, config
 
 
 class DB:
     def __init__(self, _config=None):
         if _config is None:
-            _config = glob.config
+            _config = config
         self.active = _config["db"]["active"]
         conf = adapt_config(_config[self.active], _config[self.active]["adaptor"])
 
@@ -43,3 +42,6 @@ class DB:
                 self.session.rollback()
 
             self.session.close()
+
+
+database = DB()
