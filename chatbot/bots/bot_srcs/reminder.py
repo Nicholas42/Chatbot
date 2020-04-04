@@ -1,21 +1,17 @@
 from datetime import timedelta, datetime, timezone
 
-import pytz
 from dateutil.parser import ParserError
 from pyparsing import ParserElement, ParseException
 
 from chatbot import glob
 from chatbot.bots.base import BaseBot
+from chatbot.bots.utils.formatting import format_date
 from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.bots.utils.parsing.common import rest_of_string
 from chatbot.bots.utils.parsing.date import parse_date
 from chatbot.database.messages import OutgoingMessageModel
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
-
-
-def _format_date(date: datetime):
-    return date.astimezone(pytz.timezone("Europe/Berlin")).strftime("%d.%m.%Y %H:%M:%S")
 
 
 class ReminderSender:
@@ -89,7 +85,7 @@ class ReminderBot(BaseBot):
         outgoing = f"!ping '{target}' Du wolltest an folgendes erinnert werden:\n{args['msg']}"
         self.scheduler.schedule(self.create_msg({"message": outgoing, "bottag": 0}, msg), date)
 
-        return f"Eine Nachricht wurde für {target} zum Zeitpunkt {_format_date(date)} eingeplant."
+        return f"Eine Nachricht wurde für {target} zum Zeitpunkt {format_date(date)} eingeplant."
 
     async def _react(self, incoming):
         try:
