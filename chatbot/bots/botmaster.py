@@ -1,11 +1,11 @@
 from asyncio import as_completed, create_task, CancelledError, wait
 from typing import Dict
 
-from chatbot.bots import module_logger
-from chatbot.bots.base import BaseBot
-from chatbot.bots.loader import Loader
 from chatbot.config import config
 from chatbot.interface.messages import OutgoingMessage
+from . import module_logger
+from .base import BaseBot
+from .loader import Loader
 
 logger = module_logger.getChild("botmaster")
 

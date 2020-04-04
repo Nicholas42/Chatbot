@@ -1,9 +1,9 @@
 from pyparsing import ParseBaseException
 
-from chatbot.bots.base import BaseBot
-from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.database.nickname import get_user, QEDler, Nickname as NicknameModel
 from chatbot.database.utils import normalize_nickname, inject_session
+from ..base import BaseBot
+from ..utils.parsing.command_parser import Parser
 
 
 def _add_nick(session, existing: QEDler, to_add):

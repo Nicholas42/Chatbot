@@ -2,8 +2,7 @@ from typing import Optional, Callable
 
 import pyparsing as pp
 
-from chatbot.bots.utils.parsing.common import intersperse_parser, update_dict, rest_of_string
-from .common import common_parsers
+from .common import intersperse_parser, update_dict, rest_of_string, common_parsers
 
 
 def subparser(f):

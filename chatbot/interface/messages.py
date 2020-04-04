@@ -3,7 +3,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
 
-from chatbot.interface.message_helpers import MessageType, Color, parse_date
+from .message_helpers import MessageType, Color, parse_date
 
 
 @dataclass

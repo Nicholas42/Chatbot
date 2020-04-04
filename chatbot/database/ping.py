@@ -4,9 +4,9 @@ from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP, String, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
-from chatbot.database import Base
-from chatbot.database.nickname import get_user, QEDler, create_nickname
-from chatbot.database.utils import IDMixin, UTCNow
+from . import Base
+from .nickname import get_user, QEDler, create_nickname
+from .utils import IDMixin, UTCNow
 
 MIN_DATE = datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
 

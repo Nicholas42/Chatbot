@@ -10,8 +10,8 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.sql import expression
 
-from chatbot.database.db import database
 from chatbot.interface.message_helpers import Color
+from .db import database
 
 
 def inject_session(f):

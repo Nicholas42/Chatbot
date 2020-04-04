@@ -1,6 +1,6 @@
 from chatbot.database.db import database
 from chatbot.database.nickname import QEDler
-from chatbot.helpers.qeddb import login, lookup_persons
+from ..qeddb import login, lookup_persons
 
 
 def parse_html(soup):

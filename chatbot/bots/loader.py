@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from typing import Dict, Any
 
-from chatbot.bots.base import BaseBot
+from .base import BaseBot
 
 
 class Loader:

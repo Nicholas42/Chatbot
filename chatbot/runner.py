@@ -1,9 +1,9 @@
 from aioconsole.server import start_console_server
 
-from chatbot.bots.botmaster import BotMaster
-from chatbot.connection.chat import Chat
-from chatbot.database.db import database
-from chatbot.interface.bridge import Bridge
+from .bots.botmaster import BotMaster
+from .connection.chat import Chat
+from .database.db import database
+from .interface.bridge import Bridge
 
 
 class Runner:

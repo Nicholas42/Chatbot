@@ -3,8 +3,8 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
-from chatbot.database import Base
-from chatbot.database.utils import IDMixin, normalize_nickname, CaseInsensitiveComparator, NicknameColumn
+from . import Base
+from .utils import IDMixin, normalize_nickname, CaseInsensitiveComparator, NicknameColumn
 
 
 class Nickname(IDMixin, Base):

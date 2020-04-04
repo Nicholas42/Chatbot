@@ -6,8 +6,8 @@ import pyparsing
 import pyparsing as pp
 from pyparsing import ParseBaseException
 
-from chatbot.bots.utils.parsing.command_parser import Parser
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
+from .utils.parsing.command_parser import Parser
 
 
 class BaseBot(metaclass=ABCMeta):

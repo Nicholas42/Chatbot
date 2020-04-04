@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String
 from sqlalchemy.ext.hybrid import hybrid_property
 
+from chatbot.bots.utils.youtube import check_valid
 from . import Base
 from .db import database
 from .utils import IDMixin
-from ..bots.utils.youtube import check_valid
 
 
 class Song(IDMixin, Base):
