@@ -11,8 +11,11 @@ class Config(dict):
         super().__init__()
         self.path = path
         self.env_file = env_file
+        self.load()
 
-    def load(self):
+    def load(self, path=None, env_file=None):
+        self.path = path or self.path
+        self.env_file = env_file or self.env_file
         dotenv.load_dotenv(str(self.env_file.absolute()))
         for i in self.path.glob("*.json"):
             with open(str(i.absolute())) as f:
@@ -48,3 +51,6 @@ def adapt_config(dic: dict, matches) -> dict:
         ret[i[1]] = ret.pop(i[0])
 
     return ret
+
+
+config = Config()
