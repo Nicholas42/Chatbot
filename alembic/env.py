@@ -2,10 +2,10 @@ from logging.config import fileConfig
 
 from alembic import context
 
-from chatbot.database import *
+from chatbot.database.db import database, Base
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-from chatbot.database.db import database
 
 config = context.config
 
