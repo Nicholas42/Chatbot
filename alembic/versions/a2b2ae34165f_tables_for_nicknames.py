@@ -23,7 +23,7 @@ def upgrade():
                     sa.Column('user_name', sa.String(), nullable=True),
                     sa.PrimaryKeyConstraint('_column_id', name="qedler_column_id_pkey"),
                     sa.UniqueConstraint('user_id', name="qedler_user_id_unique"),
-                    sa.UniqueConstraint('user_name', name="qeder_user_name_unqiue")
+                    sa.UniqueConstraint('user_name', name="qeder_user_name_unique")
                     )
     op.create_table('nickname',
                     sa.Column('_column_id', sa.Integer(), nullable=False),
