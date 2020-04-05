@@ -1,5 +1,5 @@
 from chatbot.bots.base import CommandBot
-from chatbot.database.db import database
+from chatbot.config import config
 from chatbot.helpers.update.qedler import run
 
 
@@ -9,7 +9,7 @@ class UpdateBot(CommandBot):
         self.name = "update"
 
     async def _react(self, msg):
-        if msg.username == database.config["qeddb"]["username"]:
+        if msg.username == config["qeddb"]["username"]:
             return await super()._react(msg)
         return None
 
