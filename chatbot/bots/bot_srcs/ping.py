@@ -63,6 +63,7 @@ class Ping(BaseBot):
     async def _react(self, incoming):
         try:
             result = self.parser.parseString(incoming.message)
-            return self.call_parse_result(result, incoming)
+            self.call_parse_result(result, incoming)
+            return self.pong(incoming)
         except ParseException:
             return None
