@@ -21,8 +21,8 @@ def upgrade():
                     sa.Column('_column_id', sa.Integer(), nullable=False),
                     sa.Column('video_id', sa.String(), nullable=True),
                     sa.Column('title', sa.String(), nullable=True),
-                    sa.PrimaryKeyConstraint('_column_id', 'song_column_id_pkey'),
-                    sa.UniqueConstraint('video_id', 'song_video_id_unique')
+                    sa.PrimaryKeyConstraint('_column_id', name='song_column_id_pkey'),
+                    sa.UniqueConstraint('video_id', name='song_video_id_unique')
                     )
     # ### end Alembic commands ###
 
