@@ -51,7 +51,7 @@ class Luise(CommandBot):
 
 
 @Luise.command()
-def help(bot: Luise, **kwargs):
+def help(bot: Luise, **__):
     """ Ich sag dir, wie du mit mir umgehen sollst! """
 
     help_msg = f"Hallo, ich bin {bot.name} und ich kann voooooooll tolle Sachen, zum Beispiel\n\n"
@@ -59,7 +59,7 @@ def help(bot: Luise, **kwargs):
 
 
 @Luise.command({"name": "new_name", "value_parser": uword})
-def be(bot, args, msg, **kwargs):
+def be(bot, args, msg, **__):
     """ Ich verwandel mich in jemand anderen! """
     bot.name = args["new_name"]
     bot.reset_rename(msg)
@@ -68,35 +68,35 @@ def be(bot, args, msg, **kwargs):
 
 
 @Luise.command()
-def ping(**kwargs):
+def ping(**__):
     """ Pong! """
 
     return "pong"
 
 
 @Luise.command()
-def slap(args, **kwargs):
+def slap(args, **__):
     """ Ich schlage jemanden! -.- """
 
     return f"*schlägt {args['_rest']}*"
 
 
 @Luise.command()
-def hug(args, **kwargs):
+def hug(args, **__):
     """ Ich knuddel jemanden! :-) """
 
     return f"*knuddelt {args['_rest']}*"
 
 
 @Luise.command()
-def say(args, **kwargs):
+def say(args, **__):
     """ Ich sage etwas! """
 
     return args["_rest"]
 
 
 @Luise.command()
-def decide(bot, args, **kwargs):
+def decide(bot, args, **__):
     """ Ich helfe dir, dich zu entscheiden! """
     salt = bot.config["secret"].encode()
 
@@ -105,7 +105,7 @@ def decide(bot, args, **kwargs):
 
 
 @Luise.command()
-def featurerequest(args, **kwargs):
+def featurerequest(args, **__):
     """ Ich wünsch mir was! Und wenn ich gaaaaanz fest dran glaube wird es auch Wirklichkeit!"""
 
     return f"Ich will {args['_rest']}!"
@@ -114,7 +114,7 @@ def featurerequest(args, **kwargs):
 @Luise.command()
 @optional_argument(name_list=["-a", "-l", "--add", "--learn"], value_parser=yt_parser, arg_name="learn")
 @optional_argument(name_list=["-r", "--remove"], value_parser=yt_parser, arg_name="remove")
-def sing(args, **kwargs):
+def sing(args, **__):
     """ Ich singe was für dich! """
     if "learn" in args:
         to_learn = args["learn"]

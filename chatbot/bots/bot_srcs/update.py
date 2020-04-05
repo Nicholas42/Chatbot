@@ -15,7 +15,7 @@ class UpdateBot(CommandBot):
 
 
 @UpdateBot.command()
-def qedler(**kwargs):
+def qedler(**__):
     """ Updatet die interne QEDler Datenbank, wichtig für Nicknames """
 
     result = run()
@@ -23,5 +23,5 @@ def qedler(**kwargs):
            f"Es sind jetzt insgesamt {result['new_count']}!"
 
 
-def create_bot(*args, **kwargs):
+def create_bot(*_, **__):
     return UpdateBot()

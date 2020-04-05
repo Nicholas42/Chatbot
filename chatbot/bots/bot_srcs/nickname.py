@@ -54,7 +54,7 @@ class Nickname(BaseBot):
         self.parser = _parser.as_pp_parser()
 
     @inject_session
-    def work(self, msg, args, session, **kwargs):
+    def work(self, msg, args, session, **__):
 
         qedler = get_user(session, args["name"])
         if qedler is None:

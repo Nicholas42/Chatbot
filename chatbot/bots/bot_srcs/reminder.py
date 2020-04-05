@@ -96,5 +96,5 @@ class ReminderBot(BaseBot):
             return None
 
 
-def create_bot(botmaster, *args, **kwargs):
+def create_bot(botmaster, *_, **__):
     return ReminderBot(botmaster)

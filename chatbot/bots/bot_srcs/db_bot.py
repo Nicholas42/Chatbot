@@ -15,5 +15,5 @@ class DBBot(BaseBot):
             session.add(model)
 
 
-def create_bot(*args, **kwargs):
+def create_bot(*_, **__):
     return DBBot()
