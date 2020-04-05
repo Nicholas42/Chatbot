@@ -26,13 +26,14 @@ def upgrade():
     session = orm.Session(bind=bind)
 
     try:
-        for i in session.query(Ping).all():
+        for i in session.query(Ping.target).all():
             if i.target_id is None:
                 i.target_id = i.target
 
         session.commit()
     except:
         session.rollback()
+        raise
     finally:
         session.close()
 
