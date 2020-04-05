@@ -3,6 +3,8 @@
     "update",
     "reminder",
     "db_bot",
+    "nickname",
+    "ping",
     "luise"
   ],
   "luise": {
