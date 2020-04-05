@@ -58,7 +58,11 @@ class Ping(BaseBot):
             return
 
         intro = f"{msg.name.strip()}, dir wollte jemand etwas sagen:"
-        return intro + _format_pings(in_order)
+        ret = intro + _format_pings(in_order)
+        for i in in_order:
+            session.delete(i)
+
+        return ret
 
     async def _react(self, incoming):
         try:
