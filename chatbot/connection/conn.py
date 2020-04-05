@@ -16,7 +16,7 @@ class PreparedConnection:
         self.connection_opts = _config["connection"]
         opt = self.connection_opts
         self.ws_url = f"{opt['protocoll']['ws']}://{opt['host']}{opt['path']}?{url_opts_str}"
-        self.user_opts = _config["user"]
+        self.user_opts = _config["login"]
         self.http_url = f"{opt['protocoll']['http']}://{opt['host']}"
 
         self.cookie = self._obtain_cookie()
@@ -26,6 +26,10 @@ class PreparedConnection:
 
     def _obtain_cookie(self):
         ses = Session()
-        login_url = self.http_url + self.connection_opts["login"]
+        login_url = self.http_url + self.connection_opts["login"]["path"]
         ses.post(login_url, data=self.user_opts)
-        return "; ".join(f"{i.name}={i.value}" for i in ses.cookies)
+
+        cookie = "; ".join(f"{i.name}={i.value}" for i in ses.cookies)
+        ses.close()
+
+        return cookie
