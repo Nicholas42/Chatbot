@@ -53,8 +53,8 @@ class Ping(BaseBot):
         if not pings:
             return
 
-        in_order = sorted(pings, key=lambda x: x.send_time)
-        if not any(map(lambda x: x.post_id - msg.id > self.id_diff, in_order)):
+        in_order = sorted(pings, key=lambda x: x.ping_time)
+        if not any(map(lambda x: msg.id - x.post_id > self.id_diff, in_order)):
             return
 
         intro = f"{msg.name.strip()}, dir wollte jemand etwas sagen:"
