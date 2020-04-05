@@ -64,9 +64,9 @@ class Ping(BaseBot):
         try:
             result = self.parser.parseString(incoming.message)
             self.call_parse_result(result, incoming)
-            return self.pong(incoming)
         except ParseException:
-            return None
+            pass
+        return self.pong(incoming)
 
 
 def create_bot(*_, **__):
