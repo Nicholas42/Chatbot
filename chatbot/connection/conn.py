@@ -16,7 +16,7 @@ class PreparedConnection:
         self.connection_opts = _config["connection"]
         opt = self.connection_opts
         self.ws_url = f"{opt['protocoll']['ws']}://{opt['host']}{opt['path']}?{url_opts_str}"
-        self.user_opts = _config["login"]
+        self.user_opts = opt["login"]
         self.http_url = f"{opt['protocoll']['http']}://{opt['host']}"
 
         self.cookie = self._obtain_cookie()
