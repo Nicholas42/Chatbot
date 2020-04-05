@@ -75,3 +75,7 @@ class Nickname(BaseBot):
             return None
 
         return self.call_parse_result(res, msg)
+
+
+def create_bot(*_, **__):
+    return Nickname()

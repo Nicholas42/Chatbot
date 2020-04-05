@@ -67,3 +67,7 @@ class Ping(BaseBot):
             return self.pong(incoming)
         except ParseException:
             return None
+
+
+def create_bot(*_, **__):
+    return Ping()
