@@ -3,15 +3,15 @@ import random
 
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
+from chatbot.bots.base import optional_argument, CommandBot
+from chatbot.bots.utils.parsing.common import uword
+from chatbot.bots.utils.parsing.youtube import parser as yt_parser
+from chatbot.bots.utils.youtube import get_video_info, VideoNotFoundError, check_restriction
 from chatbot.config import config
 from chatbot.database.db import database
 from chatbot.database.songs import Song
 from chatbot.interface.messages import IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
-from ..base import optional_argument, CommandBot
-from ..utils.parsing.common import uword
-from ..utils.parsing.youtube import parser as yt_parser
-from ..utils.youtube import get_video_info, VideoNotFoundError, check_restriction
 
 
 def _lalala():

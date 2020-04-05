@@ -1,4 +1,4 @@
-from ..base import BaseBot
+from chatbot.bots.base import BaseBot
 
 
 class Echo(BaseBot):

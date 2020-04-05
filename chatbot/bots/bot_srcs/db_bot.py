@@ -1,7 +1,7 @@
+from chatbot.bots.base import BaseBot
 from chatbot.database.db import database
 from chatbot.database.messages import IncomingMessageModel
 from chatbot.interface.messages import IncomingMessage
-from ..base import BaseBot
 
 
 class DBBot(BaseBot):

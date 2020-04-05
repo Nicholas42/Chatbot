@@ -1,6 +1,6 @@
+from chatbot.bots.base import CommandBot
 from chatbot.database.db import database
 from chatbot.helpers.update.qedler import run
-from ..base import CommandBot
 
 
 class UpdateBot(CommandBot):
