@@ -16,7 +16,7 @@ class TestPing(TestCase):
         self.session.close()
 
     def test_get_pings(self):
-        p = Ping(user_id=412, message="Blub", sender="Your Mom")
+        p = Ping(user_id=412, message="Blub", sender="Your Mom", post_id=5)
         self.session.add(p)
 
         self.assertEqual(get_user(self.session, "EpsiLon").user_id, 412)

@@ -10,8 +10,8 @@ class DB:
     def __init__(self, _config=None):
         if _config is None:
             _config = config
-        self.active = _config["db"]["active"]
-        conf = _config["self.active"]
+        self.active = _config["database"]["active"]
+        conf = _config["database"][self.active]
 
         self.engine = create_engine(self._create_url(conf))
         self._session_class = sessionmaker(bind=self.engine)
