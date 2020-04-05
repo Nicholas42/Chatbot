@@ -33,7 +33,7 @@ class Ping(BaseBot):
         self.id_diff = config["botmaster"]["ping"]["diff"]
 
     @inject_session
-    def work(self, msg: IncomingMessage, args, session):
+    def work(self, msg: IncomingMessage, args, session, *_, **__):
         target = get_user(session, args["target"])
         if target is None:
             target = create_nickname(args["target"])
