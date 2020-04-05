@@ -64,7 +64,7 @@ class ReminderBot(BaseBot):
         super().__init__()
 
         self.scheduler = ReminderSender(botmaster.send)
-        _parser = Parser("!remind", self.work)
+        _parser = Parser("/remind", self.work)
         _parser.add_optional_argument(["-t", "--target"], result_type=str, arg_name="target")
         _parser.add_positional_argument("date")
         _parser.add_positional_argument("msg", value_parser=rest_of_string)

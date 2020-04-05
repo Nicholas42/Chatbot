@@ -67,7 +67,7 @@ class CommandBot(BaseBot):
 
     @property
     def parser(self):
-        return pyparsing.CaselessKeyword(f"!{self.name}")
+        return pyparsing.CaselessKeyword(f"/{self.name}")
 
     @classmethod
     def command(cls, *args, **kwargs):

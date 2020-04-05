@@ -26,7 +26,7 @@ class Ping(BaseBot):
     def __init__(self):
         super().__init__()
 
-        _parser = Parser(f"!{self.name}", self.work)
+        _parser = Parser(f"/{self.name}", self.work)
         _parser.add_positional_argument("target")
 
         self.parser = _parser.as_pp_parser()

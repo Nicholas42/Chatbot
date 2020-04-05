@@ -45,7 +45,7 @@ class Nickname(BaseBot):
     def __init__(self):
         super().__init__()
 
-        _parser = Parser("!nickname", self.work)
+        _parser = Parser("/nickname", self.work)
 
         _parser.add_positional_argument("name")
         _parser.add_optional_argument(["-a", "--add"], result_type=str, arg_name="add")
