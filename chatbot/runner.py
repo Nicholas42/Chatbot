@@ -25,6 +25,7 @@ class Runner:
         d["db"] = database
         d["exit"] = lambda: self.server.close()
         d["config"] = config
+        d["_globals"] = globals()
 
         self.server = await start_console_server(host="0.0.0.0", port=5001, locals=d)
         await self.server.wait_closed()
