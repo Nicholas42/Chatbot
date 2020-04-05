@@ -27,9 +27,9 @@ def upgrade():
                     sa.Column('sender', sa.String(), nullable=False),
                     sa.Column('activation_time', sa.TIMESTAMP(timezone=True),
                               server_default=sa.text("TIMEZONE('utc', CURRENT_TIMESTAMP)"), nullable=False),
-                    sa.ForeignKeyConstraint(['target'], ['nickname._column_id'], ),
-                    sa.ForeignKeyConstraint(['user_id'], ['qedler.user_id'], ),
-                    sa.PrimaryKeyConstraint('_column_id')
+                    sa.ForeignKeyConstraint(['target'], ['nickname._column_id'], name='ping_target_fkey'),
+                    sa.ForeignKeyConstraint(['user_id'], ['qedler.user_id'], name='ping_user_id_fkey'),
+                    sa.PrimaryKeyConstraint('_column_id', name='ping_column_id_pkey')
                     )
     # ### end Alembic commands ###
 

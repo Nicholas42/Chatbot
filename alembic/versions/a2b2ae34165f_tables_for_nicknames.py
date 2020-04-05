@@ -21,16 +21,16 @@ def upgrade():
                     sa.Column('_column_id', sa.Integer(), nullable=False),
                     sa.Column('user_id', sa.Integer(), nullable=True),
                     sa.Column('user_name', sa.String(), nullable=True),
-                    sa.PrimaryKeyConstraint('_column_id'),
-                    sa.UniqueConstraint('user_id'),
-                    sa.UniqueConstraint('user_name')
+                    sa.PrimaryKeyConstraint('_column_id', name="qedler_column_id_pkey"),
+                    sa.UniqueConstraint('user_id', name="qedler_user_id_unique"),
+                    sa.UniqueConstraint('user_name', name="qeder_user_name_unqiue")
                     )
     op.create_table('nickname',
                     sa.Column('_column_id', sa.Integer(), nullable=False),
                     sa.Column('nickname', sa.String(), nullable=True),
                     sa.Column('user_id', sa.Integer(), nullable=True),
-                    sa.ForeignKeyConstraint(['user_id'], ['qedler.user_id'], ),
-                    sa.PrimaryKeyConstraint('_column_id')
+                    sa.ForeignKeyConstraint(['user_id'], ['qedler.user_id'], name='nickname_user_id_fkey'),
+                    sa.PrimaryKeyConstraint('_column_id', name='nickname_column_id_pkey')
                     )
     # ### end Alembic commands ###
 

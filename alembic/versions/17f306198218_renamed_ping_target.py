@@ -38,7 +38,7 @@ def upgrade():
         session.close()
 
     op.drop_constraint('ping_target_fkey', 'ping', type_='foreignkey')
-    op.create_foreign_key(None, 'ping', 'nickname', ['target_id'], ['_column_id'])
+    op.create_foreign_key('ping_target_id_fkey', 'ping', 'nickname', ['target_id'], ['_column_id'])
     op.drop_column('ping', 'target')
     # ### end Alembic commands ###
 
@@ -61,7 +61,7 @@ def downgrade():
     finally:
         session.close()
 
-    op.drop_constraint(None, 'ping', type_='foreignkey')
+    op.drop_constraint('ping_target_id_fkey', 'ping', type_='foreignkey')
     op.create_foreign_key('ping_target_fkey', 'ping', 'nickname', ['target'], ['_column_id'])
     op.drop_column('ping', 'target_id')
     # ### end Alembic commands ###

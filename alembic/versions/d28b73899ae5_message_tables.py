@@ -32,7 +32,7 @@ def upgrade():
                     sa.Column('bottag', sa.Boolean(), nullable=True),
                     sa.Column('type', sa.Enum('post', 'ping', 'pong', 'ack', name='messagetype'), nullable=True),
                     sa.Column('color', chatbot.database.utils.ColorColumn(), nullable=True),
-                    sa.PrimaryKeyConstraint('_column_id')
+                    sa.PrimaryKeyConstraint('_column_id', name='incomingmessagemodel_column_id_pkey')
                     )
     op.create_table('outgoingmessagemodel',
                     sa.Column('_column_id', sa.Integer(), nullable=False),
@@ -44,7 +44,7 @@ def upgrade():
                     sa.Column('delay', sa.Integer(), nullable=True),
                     sa.Column('publicid', sa.Integer(), nullable=True),
                     sa.Column('bottag', sa.Integer(), nullable=True),
-                    sa.PrimaryKeyConstraint('_column_id')
+                    sa.PrimaryKeyConstraint('_column_id', name='outgoingmessagemodel_column_id_pkey')
                     )
     # ### end Alembic commands ###
 
