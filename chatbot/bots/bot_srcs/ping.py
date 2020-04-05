@@ -1,9 +1,9 @@
 from pyparsing import ParseException
 
-from chatbot import glob
 from chatbot.bots.base import BaseBot
 from chatbot.bots.utils.formatting import format_date
 from chatbot.bots.utils.parsing.command_parser import Parser
+from chatbot.config import config
 from chatbot.database.nickname import get_user, create_nickname, Nickname
 from chatbot.database.ping import Ping as PingModell, get_pings
 from chatbot.database.utils import inject_session
@@ -30,7 +30,7 @@ class Ping(BaseBot):
         _parser.add_positional_argument("target")
 
         self.parser = _parser.as_pp_parser()
-        self.id_diff = glob.config["botmaster"]["default_bots"]["ping"]["diff"]
+        self.id_diff = config["botmaster"]["ping"]["diff"]
 
     @inject_session
     def work(self, msg: IncomingMessage, args, session):

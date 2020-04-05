@@ -8,5 +8,8 @@
   "luise": {
     "secret": "$LUISE_SECRET",
     "ytkey": "$YT_API_KEY"
+  },
+  "ping": {
+    "diff": 17
   }
 }
