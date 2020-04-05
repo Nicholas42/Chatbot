@@ -3,7 +3,7 @@ FROM python:3
 MAINTAINER Nicholas Schwab "chat@nicholas-schwab.de"
 EXPOSE 5001
 
-RUN apt-get update -y && apt-get upgrade -y && apt-get install netcat rlwrap -y
+RUN apt-get update -y && apt-get upgrade -y && apt-get install netcat rlwrap vim -y
 
 COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
