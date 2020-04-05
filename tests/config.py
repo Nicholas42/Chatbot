@@ -10,7 +10,7 @@ class TestConfig(TestCase):
         for i in environ:
             del environ[i]
         test_data = Path(__file__).parent / "test_data"
-        self.config = Config(test_data / "configurations", test_data / "env-file")
+        self.config = Config(test_data / "configurations", test_data / "env-file")["connection"]
 
     def test_normal(self):
         self.assertEqual(self.config["connection"]["path"], "/websocket")

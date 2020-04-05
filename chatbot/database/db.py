@@ -3,7 +3,7 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
-from chatbot.config import adapt_config, config
+from chatbot.config import config
 
 
 class DB:
@@ -11,7 +11,7 @@ class DB:
         if _config is None:
             _config = config
         self.active = _config["db"]["active"]
-        conf = adapt_config(_config[self.active], _config[self.active]["adaptor"])
+        conf = _config["self.active"]
 
         self.engine = create_engine(self._create_url(conf))
         self._session_class = sessionmaker(bind=self.engine)

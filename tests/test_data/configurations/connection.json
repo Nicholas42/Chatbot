@@ -1,5 +1,5 @@
 {
-  "_test": null,
+  "test": "$TEST",
   "connection": {
     "protocoll": {
       "http": "https",
@@ -9,10 +9,10 @@
     "path": "/websocket"
   },
   "user": {
-    "_username": null,
-    "_password": null,
+    "username": "$USER_USERNAME",
+    "password": "$USER_PASSWORD",
     "stuff": {
-      "_secret": null,
+      "secret": "$STUFF_SECRET",
       "not secret": null
     }
   }

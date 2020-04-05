@@ -12,37 +12,31 @@ class Config(UserDict):
         super().__init__()
         self.path = path
         self.env_file = env_file
+        self.environ = None
         self.load()
 
     def load(self, path=None, env_file=None):
         self.path = path or self.path
         self.env_file = env_file or self.env_file
-        dotenv.load_dotenv(str(self.env_file.absolute()))
+        self.environ = dotenv.dotenv_values(str(self.env_file.absolute()))
         for i in self.path.glob("*.json"):
             with open(str(i.absolute())) as f:
-                d: dict = json.load(f)
-                if not isinstance(d, dict):
-                    raise ValueError(f"Config file {self.path} does not provide a dictionary.")
-            self.update(self._load_dict(d))
+                self.data[i.stem] = json.load(f)
 
-    def _load_dict(self, inp, prefix=""):
-        out = dict()
-        for key, value in inp.items():
-            if isinstance(value, dict):
-                out[key] = self._load_dict(value, f"{prefix}{key.upper()}_")
-            elif key.startswith("_") and value is None:
-                out[key[1:]] = self._load_hidden(key[1:], prefix)
+        self._sub_variables(self.data)
+
+    def _sub_variables(self, iterable):
+        try:
+            items = iterable.items() if isinstance(iterable, dict) else enumerate(iterable)
+        except TypeError:
+            return
+        for k, v in items:
+            if isinstance(v, str):
+                if v.startswith("$"):
+                    v = v[1:]
+                    iterable[k] = environ.get(v, self.environ[v])
             else:
-                out[key] = value
-        return out
-
-    @staticmethod
-    def _load_hidden(key, prefix):
-        env_name = f"{prefix}{key.upper()}"
-        ret = environ.get(env_name)
-        if ret is None:
-            raise KeyError(f"Hidden config parameter {env_name} is needed.")
-        return ret
+                self._sub_variables(v)
 
 
 def adapt_config(dic: dict, matches) -> dict:

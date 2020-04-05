@@ -1,23 +1,11 @@
 {
-  "db": {
-    "active": "postgres"
-  },
+  "active": "postgres",
   "postgres": {
-    "_user": null,
-    "_db": null,
-    "_password": null,
+    "username": "$POSTGRES_USER",
+    "database": "$POSTGRES_DB",
+    "password": "$POSTGRES_PASSWORD",
     "drivername": "postgres",
     "port": 5432,
-    "host": "db",
-    "adaptor": [
-      [
-        "user",
-        "username"
-      ],
-      [
-        "db",
-        "database"
-      ]
-    ]
+    "host": "db"
   }
 }

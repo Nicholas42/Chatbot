@@ -26,7 +26,7 @@ class Luise(CommandBot):
         super().__init__()
         if _config is None:
             _config = config
-        self.config = _config["botmaster"]["default_bots"]["luise"]
+        self.config = _config["botmaster"]["luise"]
 
         self.botmaster = None
         self.rename_msg = None
