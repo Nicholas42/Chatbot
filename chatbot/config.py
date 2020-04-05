@@ -1,11 +1,12 @@
 import json
+from collections import UserDict
 from os import environ
 from pathlib import Path
 
 import dotenv
 
 
-class Config(dict):
+class Config(UserDict):
     def __init__(self, path: Path = Path(__file__).parent / ".." / "data" / "configuration",
                  env_file: Path = Path(__file__).parent / ".." / ".env"):
         super().__init__()
