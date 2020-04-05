@@ -57,7 +57,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = glob.db.engine
+    connectable = database.engine
 
     with connectable.connect() as connection:
         context.configure(
