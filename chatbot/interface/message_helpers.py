@@ -1,6 +1,8 @@
 from datetime import datetime
 from enum import Enum, auto
 
+import pytz
+
 from chatbot.config import config
 
 
@@ -11,12 +13,12 @@ class MessageType(Enum):
     ack = auto()
 
 
-def parse_date(text: str) -> datetime:
-    return datetime.strptime(text, config["message"]["dateformat"])
+def parse_date(text: str, tzinfo=pytz.timezone("Europe/Berlin")) -> datetime:
+    return datetime.strptime(text, config["message"]["dateformat"]).replace(tzinfo=tzinfo)
 
 
-def format_date(date: datetime) -> str:
-    return date.strftime(config["message"]["dateformat"])
+def format_date(date: datetime, tzinfo=pytz.timezone("Europe/Berlin")) -> str:
+    return date.astimezone(tzinfo).strftime(config["message"]["dateformat"])
 
 
 class Color:

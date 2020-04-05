@@ -57,7 +57,7 @@ class Ping(BaseBot):
         if not any(map(lambda x: msg.id - x.post_id > self.id_diff, in_order)):
             return
 
-        intro = f"{msg.name.strip()}, dir wollte jemand etwas sagen:"
+        intro = f"{msg.name.strip()}, dir wollte jemand etwas sagen:\n"
         ret = intro + _format_pings(in_order)
         for i in in_order:
             session.delete(i)
