@@ -1,6 +1,5 @@
 from abc import abstractmethod, ABCMeta
 from functools import wraps
-from typing import Dict, Callable
 
 import pyparsing
 import pyparsing as pp
@@ -11,8 +10,6 @@ from .utils.parsing.command_parser import Parser
 
 
 class BaseBot(metaclass=ABCMeta):
-    commands: Dict[Callable, Parser] = dict()
-
     def __init__(self):
         self.name = self.__class__.__name__
         self.react_on_bots = False
@@ -70,6 +67,12 @@ class CommandBot(BaseBot):
         return pyparsing.CaselessKeyword(f"/{self.name}")
 
     @classmethod
+    def add_command(cls, function, cmd):
+        if not hasattr(cls, "commands"):
+            cls.commands = dict()
+        cls.commands[function] = cmd
+
+    @classmethod
     def command(cls, *args, **kwargs):
         def decorator(f):
             name = kwargs.get("name", f.__name__)
@@ -94,7 +97,7 @@ class CommandBot(BaseBot):
             for i in getattr(f, "__opt_args__", []):
                 parser.add_optional_argument(*i[0], **i[1])
 
-            cls.commands[decorated] = parser
+            cls.add_command(decorated, parser)
             return decorated
 
         return decorator
