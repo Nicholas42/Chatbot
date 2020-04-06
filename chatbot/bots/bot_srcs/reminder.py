@@ -10,6 +10,7 @@ from chatbot.bots.utils.parsing.common import rest_of_string
 from chatbot.bots.utils.parsing.date import parse_date
 from chatbot.database.db import database
 from chatbot.database.messages import OutgoingMessageModel
+from chatbot.database.ping import create_ping
 from chatbot.interface.messages import OutgoingMessage, IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
 
@@ -83,8 +84,11 @@ class ReminderBot(BaseBot):
         if date is None:
             return f"Ich konnte das Datum nicht lesen :-("
 
-        outgoing = f"!ping '{target}' Du wolltest an folgendes erinnert werden:\n{args['msg']}"
+        outgoing = f"{target}, du wolltest an folgendes erinnert werden:\n{args['msg']}"
         self.scheduler.schedule(self.create_msg({"message": outgoing, "bottag": 0}, msg), date)
+        with database.context as session:
+            create_ping(session, target, post_id=msg.id, message=args['msg'], ping_time=msg.date, sender=msg.name,
+                        verified=msg.username, activation_time=date)
 
         return f"Eine Nachricht wurde für {target} zum Zeitpunkt {format_date(date)} eingeplant."
 
