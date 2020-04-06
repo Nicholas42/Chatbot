@@ -14,7 +14,7 @@ class MessageType(Enum):
 
 
 def parse_date(text: str, tzinfo=pytz.timezone("Europe/Berlin")) -> datetime:
-    return datetime.strptime(text, config["message"]["dateformat"]).replace(tzinfo=tzinfo)
+    return tzinfo.localize(datetime.strptime(text, config["message"]["dateformat"]))
 
 
 def format_date(date: datetime, tzinfo=pytz.timezone("Europe/Berlin")) -> str:
