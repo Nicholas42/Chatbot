@@ -141,7 +141,7 @@ def sing(args, **__):
         to_remove = args["remove"]
         with database.context as session:
             try:
-                song = session.query(Song).filter_by(Song.video_id == to_remove).one()
+                song = session.query(Song).filter(Song.video_id == to_remove).one()
             except NoResultFound:
                 return f"Ich kann das gar nicht singen!"
             except MultipleResultsFound:
