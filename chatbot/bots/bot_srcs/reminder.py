@@ -72,7 +72,7 @@ class ReminderBot(BaseBot):
 
         self.parser: ParserElement = _parser.as_pp_parser()
 
-    def work(self, msg: IncomingMessage, args):
+    def work(self, msg: IncomingMessage, args, **_):
         target = args.get("target", msg.name.strip())
         try:
             date = parse_date(args["date"])
