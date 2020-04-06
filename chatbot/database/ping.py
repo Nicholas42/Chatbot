@@ -49,7 +49,6 @@ def get_pings(session, targetname, user_id=None):
 
 def create_ping(session, targetname, **kwargs):
     target = get_user(session, targetname)
-    target = session.merge(target)
     p = Ping(**kwargs)
     if isinstance(target, QEDler):
         p.user = target
