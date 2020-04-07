@@ -9,7 +9,7 @@ from chatbot.bots.utils.parsing.youtube import parser as yt_parser
 from chatbot.bots.utils.youtube import get_video_info, VideoNotFoundError, check_restriction
 from chatbot.config import config
 from chatbot.database.db import database
-from chatbot.database.songs import Song
+from chatbot.database.songs import Song, check_song_validity
 from chatbot.interface.messages import IncomingMessage
 from chatbot.utils.async_sched import AsyncScheduler
 
@@ -114,7 +114,8 @@ def featurerequest(args, **__):
 @Luise.command()
 @optional_argument(name_list=["-a", "-l", "--add", "--learn"], value_parser=yt_parser, arg_name="learn")
 @optional_argument(name_list=["-r", "--remove"], value_parser=yt_parser, arg_name="remove")
-def sing(args, **__):
+@optional_argument(name_list=["-c", "--check"], arg_name="remove")
+def sing(args, msg, **__):
     """ Ich singe was für dich! """
     if "learn" in args:
         to_learn = args["learn"]
@@ -149,9 +150,20 @@ def sing(args, **__):
             title = song.title
             session.delete(song)
         return f"Ich kann jetzt {title} nicht mehr singen!"
+    elif "check" in args:
+        if msg.username != config["qeddb"]["username"]:
+            return "Das ist sooooo anstrengend."
+
+        with database.context as session:
+            invalid = check_song_validity(session)
+            if invalid:
+                return f"{len(invalid)} meiner Lieder kann ich leider nicht mehr so gut singen :-("
+            else:
+                return "Ich kann noch alle meine Lieder suuuuper singen :-)"
+
     else:
         with database.context as session:
-            song: Song = random.sample(session.query(Song).all(), 1)[0]
+            song: Song = random.sample(session.query(Song).filter(Song.valid).all(), 1)[0]
             return f"{song.title}\n{song.url}"
 
 
