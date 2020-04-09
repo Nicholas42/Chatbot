@@ -63,11 +63,11 @@ class BaseChat(metaclass=ABCMeta):
         logger.info("Shut down.")
 
     @abstractmethod
-    def _send_msg(self, msg):
+    async def _send_msg(self, msg):
         pass
 
     @abstractmethod
-    def _listen_to(self, channel):
+    async def _listen_to(self, channel):
         pass
 
     @abstractmethod
