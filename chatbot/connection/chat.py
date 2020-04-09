@@ -1,16 +1,19 @@
 import logging
 from asyncio import CancelledError, sleep
+from typing import Dict
 
 from websockets import ConnectionClosedError
 
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
 from . import module_logger
 from .base_chat import BaseChat
+from .channel import Channel
 
 logger: logging.Logger = module_logger.getChild("chat")
 
 
 class Chat(BaseChat):
+    channels: Dict[str, Channel]
 
     async def _send_msg(self, message: OutgoingMessage):
         channel = message.channel
@@ -46,3 +49,6 @@ class Chat(BaseChat):
             if channel in self.channels and self.channels[channel]:
                 await self.channels[channel].stop_listening()
             raise
+
+    def _create_channel(self, channel):
+        return Channel(channel, self.config)

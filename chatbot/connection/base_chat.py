@@ -6,11 +6,9 @@ from typing import Dict
 from chatbot.config import config
 from chatbot.connection.chat import logger
 from chatbot.interface.messages import IncomingMessage
-from .channel import Channel
 
 
 class BaseChat(metaclass=ABCMeta):
-    channels: Dict[str, Channel]
     listener_tasks: Dict[str, Task]
 
     def __init__(self, bridge, _config=None):
@@ -38,7 +36,7 @@ class BaseChat(metaclass=ABCMeta):
 
     def listen(self, channel):
         logger.info(f"Registering channel {channel}.")
-        self.channels[channel] = Channel(channel, self.config)
+        self.channels[channel] = self._create_channel(channel)
 
         self.listener_tasks[channel] = create_task(self._listen_to(channel))
         logger.info(f"Registered channel {channel}.")
@@ -70,4 +68,8 @@ class BaseChat(metaclass=ABCMeta):
 
     @abstractmethod
     def _listen_to(self, channel):
+        pass
+
+    @abstractmethod
+    def _create_channel(self, channel):
         pass
