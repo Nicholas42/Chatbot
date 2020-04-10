@@ -114,7 +114,7 @@ def featurerequest(args, **__):
 @Luise.command()
 @optional_argument(name_list=["-a", "-l", "--add", "--learn"], value_parser=yt_parser, arg_name="learn")
 @optional_argument(name_list=["-r", "--remove"], value_parser=yt_parser, arg_name="remove")
-@optional_argument(name_list=["-c", "--check"], arg_name="remove")
+@optional_argument(name_list=["-c", "--check"], arg_name="check")
 def sing(args, msg, **__):
     """ Ich singe was für dich! """
     if "learn" in args:

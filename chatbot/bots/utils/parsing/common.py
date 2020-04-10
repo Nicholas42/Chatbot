@@ -11,8 +11,15 @@ common_parsers = {
     bool: pp.Empty().setParseAction(lambda x: True)
 }
 
+
+def default_parser(default):
+    return pp.Empty().setParseAction(default)
+
+
 rest_of_line = pp.restOfLine.copy()
 rest_of_string = pp.SkipTo(pp.StringEnd())
+
+rest_parser = rest_of_string("_rest").setName("_rest").addParseAction(lambda x: {"_rest": x[0]})
 
 
 def update_dict(dict_list):

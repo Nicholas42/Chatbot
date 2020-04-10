@@ -16,6 +16,8 @@ class BaseBot(metaclass=ABCMeta):
 
     def call_parse_result(self, res: pp.ParseResults, msg, *args, **kwargs):
         d = res.asDict()
+        if "help" in d["options"]:
+            return d["options"]["help"]
         return d["command"](msg, *args, bot=self, args=d["options"], **kwargs)
 
     def create_msg(self, msg, incoming):
