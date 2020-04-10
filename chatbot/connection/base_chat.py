@@ -1,11 +1,14 @@
+import logging
 from abc import ABCMeta, abstractmethod
 from asyncio import CancelledError, Task
 from asyncio.tasks import create_task, wait
 from typing import Dict
 
 from chatbot.config import config
-from chatbot.connection.chat import logger
 from chatbot.interface.messages import IncomingMessage
+from . import module_logger
+
+logger: logging.Logger = module_logger.getChild("chat")
 
 
 class BaseChat(metaclass=ABCMeta):

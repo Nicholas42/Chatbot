@@ -1,15 +1,11 @@
-import logging
 from asyncio import CancelledError, sleep
 from typing import Dict
 
 from websockets import ConnectionClosedError
 
 from chatbot.interface.messages import IncomingMessage, OutgoingMessage
-from . import module_logger
-from .base_chat import BaseChat
+from .base_chat import BaseChat, logger
 from .channel import Channel
-
-logger: logging.Logger = module_logger.getChild("chat")
 
 
 class Chat(BaseChat):
