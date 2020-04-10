@@ -3,18 +3,22 @@ from aioconsole.server import start_console_server
 from .bots.botmaster import BotMaster
 from .config import config
 from .connection.chat import Chat
+from .connection.local_chat import LocalChat
 from .database.db import database
 from .interface.bridge import Bridge
 
 
 class Runner:
-    def __init__(self, _config=None):
+    def __init__(self, _config=None, local=False):
         if _config is not None:
             config.load(_config.path, config.env_file)
 
         self.server = None
         self.bridge = Bridge()
-        self.chat = Chat(self.bridge)
+        if local:
+            self.chat = LocalChat(self.bridge)
+        else:
+            self.chat = Chat(self.bridge)
         self.botmaster = BotMaster(self.bridge)
 
     async def wait_running(self):
