@@ -22,10 +22,11 @@ class LocalChat(BaseChat):
 
     async def _send_msg(self, msg):
         print(msg.to_dict())
+        print(msg.message)
 
     async def _listen_to(self, channel):
         loop = get_running_loop()
-        loop.add_reader(sys.stdin, self.queue.put_nowait)
+        loop.add_reader(sys.stdin, lambda: self.queue.put_nowait(sys.stdin.readline()))
 
         while True:
             msg = await self.queue.get()
