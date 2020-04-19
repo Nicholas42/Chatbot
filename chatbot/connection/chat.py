@@ -23,9 +23,9 @@ class Chat(BaseChat):
             while True:
                 try:
                     conn = await self.channels[channel].start_listening()
-                except ConnectionResetError as e:
-                    logger.exception(e)
-                    await sleep(2)
+                except ConnectionError as e:
+                    logger.exception("Connection reset when reconnecting, retrying", exc_info=e)
+                    await sleep(10)
                     continue
                 try:
                     async for msg in conn:
